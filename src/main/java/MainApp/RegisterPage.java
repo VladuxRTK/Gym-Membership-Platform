@@ -1,4 +1,11 @@
 package MainApp;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
@@ -6,14 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
-
-import javax.swing.*;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import java.awt.Color;
 public class RegisterPage extends JFrame implements ActionListener{
 	private JTextField username;
 	private JPasswordField password;
@@ -121,6 +120,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 	    	obj.put("username", usernameField);
 	    	obj.put("password", passwordField);
 	        obj.put("role" , "trainer");
+	        obj.put("group","aba");
 	        jsonArray.add(obj);
 	        
 	    
@@ -143,6 +143,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 	    	obj.put("password", passwordField);
 	        obj.put("role" , "gymUser");
 	        obj.put("membershipType",null);
+	        obj.put("group","aba");
 	        jsonArray.add(obj);
 	        
 	        
