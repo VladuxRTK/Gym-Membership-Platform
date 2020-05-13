@@ -1,24 +1,19 @@
 package MainApp;
-import javax.swing.*;
-
+import AbstractTypes.Administrator;
 import AbstractTypes.GymUser;
 import AbstractTypes.Trainer;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-
-
-
-import AbstractTypes.Administrator;
-
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Iterator;
 public class Login extends JFrame implements ActionListener{
 	//private JPanel panel;
@@ -133,10 +128,12 @@ public class Login extends JFrame implements ActionListener{
 		}
 		else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton2.isSelected() && role.equals("trainer"))
 		{
-			Trainer trainer = new Trainer(usernameField);
+			Trainer trainer = new Trainer(usernameField,obj.get("group").toString());
+
+
 			JOptionPane.showMessageDialog(this,"Logged in as trainer");
 			isLogged=true;
-			new TrainerPage();
+			new TrainerPage(trainer);
 			dispose();
 		}
 		else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton3.isSelected() && role.equals("gymUser"))
