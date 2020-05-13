@@ -60,6 +60,7 @@ public class EditUserGroup extends  JFrame{
 
                     arrayJSon.add(obj.get("username").toString());
                 }
+                int v;
             }
 
             for(String s : arrayJSon) {
