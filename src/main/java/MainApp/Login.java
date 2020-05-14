@@ -140,7 +140,7 @@ public class Login extends JFrame implements ActionListener{
 		{
 			
 			GymUser user=new GymUser(usernameField);
-			System.out.println("User");
+			
 			isLogged=true;
 			JOptionPane.showMessageDialog(this,"Logged in as user");
 			new GymUserPage(user);
