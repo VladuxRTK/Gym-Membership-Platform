@@ -9,11 +9,13 @@ public class GymUserPage extends JFrame implements ActionListener {
 	private JButton manageAccount;
 	private JButton sendTrainerSuggestion;
 	private JButton seeWorkoutProgamAndClass;
+	private GymUser gymUser;
 
-	public GymUserPage(GymUser user)
+	public GymUserPage(GymUser gymUser)
 	{
-		JLabel text = new JLabel("Welcome " + user.getUsername());
-		text.setBounds(500,120,400 + user.getUsername().length(),90 );
+		this.gymUser = gymUser;
+		JLabel text = new JLabel("Welcome " + gymUser.getUsername());
+		text.setBounds(500,120,400 + gymUser.getUsername().length(),90 );
 		text.setFont(new Font("Tahoma",Font.PLAIN,40));
 		manageAccount = new JButton("Change account details");
 		manageAccount.setBounds(40,400,250,90);
@@ -44,7 +46,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		JButton clicked = (JButton)e.getSource();
 		if(clicked == manageAccount);
 		{
-			System.out.println("Change details");
+			new EditAccount(this.gymUser);
 		}
 	}
 }
