@@ -1,17 +1,52 @@
 package MainApp;
 import AbstractTypes.GymUser;
 import javax.swing.*;
-public class GymUserPage extends JFrame{
-	public GymUserPage(GymUser user)
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GymUserPage extends JFrame implements ActionListener {
+	private JButton manageAccount;
+	private JButton sendTrainerSuggestion;
+	private JButton seeWorkoutProgamAndClass;
+	private GymUser gymUser;
+
+	public GymUserPage(GymUser gymUser)
 	{
-		JLabel text = new JLabel("Welcome " + user.getUsername());
-		text.setBounds(150,200,125,30);
-		
-		this.setSize(600,600);
+		this.gymUser = gymUser;
+		JLabel text = new JLabel("Welcome " + gymUser.getUsername());
+		text.setBounds(500,120,400 + gymUser.getUsername().length(),90 );
+		text.setFont(new Font("Tahoma",Font.PLAIN,40));
+		manageAccount = new JButton("Change account details");
+		manageAccount.setBounds(40,400,250,90);
+		manageAccount.addActionListener(this);
+		manageAccount.setFont(new Font("Tahoma", Font.PLAIN,20));
+		sendTrainerSuggestion= new JButton("Send Suggestion");
+		sendTrainerSuggestion.setBounds(500,400,250,90);
+		sendTrainerSuggestion.addActionListener(this);
+		sendTrainerSuggestion.setFont(new Font("Tahoma", Font.PLAIN,20));
+		seeWorkoutProgamAndClass = new JButton(("See class and workout"));
+		seeWorkoutProgamAndClass.setBounds(960,400,250,90);
+		seeWorkoutProgamAndClass.addActionListener(this);
+		seeWorkoutProgamAndClass.setFont(new Font("Tahoma", Font.PLAIN,20));
+		this.add(seeWorkoutProgamAndClass);
+		this.add(sendTrainerSuggestion);
+		this.add(manageAccount);
+		this.setSize(1280,640);
 		this.add(text);
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton clicked = (JButton)e.getSource();
+		if(clicked == manageAccount);
+		{
+			new EditAccount(this.gymUser);
+		}
 	}
 }

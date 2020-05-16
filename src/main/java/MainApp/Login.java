@@ -139,7 +139,7 @@ public class Login extends JFrame implements ActionListener{
 		else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton3.isSelected() && role.equals("gymUser"))
 		{
 			
-			GymUser user=new GymUser(usernameField);
+			GymUser user=new GymUser(usernameField,passwordField);
 			
 			isLogged=true;
 			JOptionPane.showMessageDialog(this,"Logged in as user");
