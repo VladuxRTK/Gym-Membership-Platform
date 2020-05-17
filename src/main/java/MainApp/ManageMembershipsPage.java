@@ -1,23 +1,21 @@
 package MainApp;
-import java.awt.Color;
-import java.awt.Font;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 public class ManageMembershipsPage extends JFrame{
 	
 	private JSONParser parser;
@@ -109,24 +107,18 @@ public class ManageMembershipsPage extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-            	
+
                 row[0] = textType.getText();
                 row[1] = textPrice.getText();
-                
-                
+
                 // add row to the model
                 model.addRow(row);
                 JSONObject obj = new JSONObject();
     	    	obj.put("name", row[0]);
     	    	obj.put("price", row[1]);
-    	        
+
     	        jsonArray.add(obj);
-    	        
-    	    
-    	    	
-    	   
-    	    	
-    	    
+
     	    try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
     	    file.write(jsonArray.toJSONString());
     	    file.flush();
@@ -212,8 +204,6 @@ public class ManageMembershipsPage extends JFrame{
                 }
             }
         });
-        
-     
         
 	}
 	
