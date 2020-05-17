@@ -142,14 +142,56 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
 
                 // i = the index of the selected row
-                int i = table.getSelectedRow();
-                if(i >= 0){
+
+
                     // remove a row from jtable
-                    model.removeRow(i);
-                }
-                else{
-                    System.out.println("User's already removed from group!");
-                }
+
+                    try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                        jsonArray = (JSONArray) parser.parse(reader);
+
+                    } catch (IOException h) {
+                        h.printStackTrace();
+                    } catch (ParseException h) {
+                        h.printStackTrace();
+                    }
+
+
+                    JSONArray auxJS = new JSONArray();
+
+                    Iterator<JSONObject> it = jsonArray.iterator();
+                    while (it.hasNext()) {
+
+                        JSONObject newObj = it.next();
+
+                        if (newObj.get("username").toString().equals(model.getValueAt(table.getSelectedRow(),0).toString())) {
+
+                            JSONObject auxObj = new JSONObject();
+
+                            auxObj.put("username", newObj.get("username"));
+                            auxObj.put("group", "unassigned");
+                            auxObj.put("role", "gymUser");
+                            auxObj.put("password", newObj.get("password"));
+                            auxObj.put("membershipType", newObj.get("membershipType"));
+                            auxJS.add(auxObj);
+                            model.removeRow(table.getSelectedRow());
+
+
+                            // model2.removeRow(table2.getSelectedRow());
+
+
+                        } else {
+
+                            auxJS.add(newObj);
+                        }
+                        try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                            file.write(auxJS.toJSONString());
+                            file.flush();
+                        } catch (IOException h) {
+                            h.printStackTrace();
+                        }
+                    }
+
+
             }
         });
 
