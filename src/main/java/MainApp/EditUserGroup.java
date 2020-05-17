@@ -72,7 +72,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         table.setFont(font);
         table.setRowHeight(30);
 
-
+//
 
         table2.setBackground(Color.LIGHT_GRAY);
         table2.setForeground(Color.black);
