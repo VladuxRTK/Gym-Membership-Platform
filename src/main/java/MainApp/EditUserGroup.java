@@ -331,7 +331,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
                     JSONObject newObj = it.next();
 
-                    if (newObj.get("username").toString().equals(model.getValueAt(i, 0).toString())) {
+                    if (newObj.get("username").toString().equals(model.getValueAt(table.getSelectedRow(), 0).toString())) {
 
                         JSONObject auxObj = new JSONObject();
 
@@ -341,7 +341,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         auxObj.put("password", newObj.get("password"));
                         auxObj.put("membershipType", newObj.get("membershipType"));
                         auxJS.add(auxObj);
-                        model.removeRow(i);
+
 
 
                         // model2.removeRow(table2.getSelectedRow());
@@ -357,9 +357,13 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                     } catch (IOException h) {
                         h.printStackTrace();
                     }
+                    model.removeRow(i);
                 }
 
 
+            }
+            else{
+                System.out.println("Error");
             }
         }
 
@@ -378,43 +382,48 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             JSONArray auxJS = new JSONArray();
             String aux1="";
             Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
+            int i = table2.getSelectedRow();
+            if(i>=0) {
+                while (it.hasNext()) {
 
-                JSONObject newObj = it.next();
-
-                int i = table2.getSelectedRow();
-
-                if (newObj.get("username").toString().equals(model2.getValueAt(table2.getSelectedRow(), 0).toString())) {
-
-                    JSONObject auxObj = new JSONObject();
-
-                    auxObj.put("username", newObj.get("username"));
-                    auxObj.put("group", "aba");
-                    auxObj.put("role", "gymUser");
-                    auxObj.put("password", newObj.get("password"));
-                    auxObj.put("membershipType", newObj.get("membershipType"));
-                    auxJS.add(auxObj);
-                    aux1 = auxObj.get("username").toString();
-                    Object row[] = new Object[1];
-                    row[0] = newObj.get("username");
-                    model.addRow(row);
+                    JSONObject newObj = it.next();
 
 
+                    if (newObj.get("username").toString().equals(model2.getValueAt(i, 0).toString())) {
 
-                } else {
+                        JSONObject auxObj = new JSONObject();
 
-                    auxJS.add(newObj);
+                        auxObj.put("username", newObj.get("username"));
+                        auxObj.put("group", "aba");
+                        auxObj.put("role", "gymUser");
+                        auxObj.put("password", newObj.get("password"));
+                        auxObj.put("membershipType", newObj.get("membershipType"));
+                        auxJS.add(auxObj);
+                        aux1 = auxObj.get("username").toString();
+                        Object row[] = new Object[1];
+                        row[0] = newObj.get("username");
+                        model.addRow(row);
+                        this.dispose();
+
+
+                    } else {
+
+                        auxJS.add(newObj);
+                    }
+
                 }
 
-            }
-            System.out.print(auxJS);
 
-            try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                file.write(auxJS.toJSONString());
-                file.flush();
-            } catch (IOException h) {
-                h.printStackTrace();
+                System.out.print(auxJS);
+
+                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                    file.write(auxJS.toJSONString());
+                    file.flush();
+                } catch (IOException h) {
+                    h.printStackTrace();
+                }
             }
+            else System.out.print("error");
             /*String aux = "unassigned";
             Iterator<JSONObject> iti = jsonArray.iterator();
             Object[] row = new Object[1];
