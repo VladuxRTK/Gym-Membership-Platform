@@ -1,15 +1,27 @@
 package MainApp;
 
 import AbstractTypes.Trainer;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
 
 public class TrainerPage extends JFrame implements ActionListener {
 
 	private Trainer trainer;
 	private JButton editUserGroup;
+	private JButton sendOrderSuggestion;
+	private JFrame suggestionFrame;
+	private JTextArea addSuggestiontTextArea;
+	private JButton sendSuggestion;
 
 	public TrainerPage(Trainer trainer)
 	{
@@ -18,13 +30,17 @@ public class TrainerPage extends JFrame implements ActionListener {
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		this.sendOrderSuggestion = new JButton("Send admin order suggestion");
+		suggestionFrame = new JFrame("Suggestion Page");
+		sendOrderSuggestion.addActionListener(this);
+		sendOrderSuggestion.setBounds(300,500,200,50);
 		editUserGroup = new JButton("Edit User Group");
-
+		addSuggestiontTextArea = new JTextArea();
 		editUserGroup.addActionListener(this);
-
+		sendSuggestion = new JButton("Send suggestion");
 		editUserGroup.setBounds(300,300,200,50);
 		this.add(editUserGroup);
+		this.add(sendOrderSuggestion);
 
 	}
 
@@ -36,6 +52,48 @@ public class TrainerPage extends JFrame implements ActionListener {
 		if(clicked == editUserGroup){
 
 			new EditUserGroup(trainer);
+		}
+
+		if(clicked == sendOrderSuggestion) {
+
+			suggestionFrame.setSize(700,600);
+			suggestionFrame.setVisible(true);
+			suggestionFrame.setLayout(null);
+			suggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			addSuggestiontTextArea.setBounds(300,100,200,100);
+			sendSuggestion.setBounds(300,400,100,50);
+			suggestionFrame.add(addSuggestiontTextArea);
+			suggestionFrame.add(sendSuggestion);
+			sendSuggestion.addActionListener(this);
+
+
+
+
+		}
+		if(clicked == sendSuggestion)
+		{
+			JSONArray jsonArray = new JSONArray();
+			JSONParser parser = new JSONParser();
+
+			try (Reader reader = new FileReader("src/main/java/Resources/suggestions.json")) {
+				jsonArray = (JSONArray) parser.parse(reader);
+
+			} catch (IOException | ParseException h) {
+				h.printStackTrace();
+			}
+			JSONObject obj = new JSONObject();
+			obj.put("username",this.trainer.getUsername());
+			obj.put("suggestion",addSuggestiontTextArea.getText());
+			jsonArray.add(obj);
+			try (FileWriter file = new FileWriter("src/main/java/Resources/suggestions.json")) {
+				file.write(jsonArray.toJSONString());
+				file.flush();
+
+
+			} catch (IOException h) {
+				h.printStackTrace();
+			}
+			System.out.println(jsonArray);
 		}
 	}
 
