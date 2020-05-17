@@ -29,7 +29,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
     private JSONArray jsonArray;
     private Trainer trainer;
     private DefaultTableModel model;
-    private  JTable table;
+    private JTable table;
     private JTable table2;
     private DefaultTableModel model2;
     private JFrame addFrame;
@@ -42,15 +42,15 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
         this.trainer = trainer;
 
-        this.setSize(1280,640);
+        this.setSize(1280, 640);
         this.setLayout(null);
         this.setVisible(true);
 
         addUser = new JButton("Add");
         removeUser = new JButton("Remove");
 
-        addUser.setBounds(300,300,150,25);
-        removeUser.setBounds(300,200,150,25);
+        addUser.setBounds(300, 300, 150, 25);
+        removeUser.setBounds(300, 200, 150, 25);
 
         model = new DefaultTableModel();
         model2 = new DefaultTableModel();
@@ -68,7 +68,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         // Change A JTable Background Color, Font Size, Font Color, Row Height
         table.setBackground(Color.LIGHT_GRAY);
         table.setForeground(Color.black);
-        Font font = new Font("",1,22);
+        Font font = new Font("", 1, 22);
         table.setFont(font);
         table.setRowHeight(30);
 
@@ -83,12 +83,12 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         table.setModel(model);
         table2.setModel(model2);
 
-        parser=new JSONParser();
+        parser = new JSONParser();
 
         try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-            jsonArray = (JSONArray)parser.parse(reader);
+            jsonArray = (JSONArray) parser.parse(reader);
 
-        }catch (IOException h) {
+        } catch (IOException h) {
             h.printStackTrace();
         } catch (ParseException h) {
             h.printStackTrace();
@@ -96,18 +96,16 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
         Object[] row = new Object[1];
         Object[] row2 = new Object[1];
-        String aux="unassigned";
+        String aux = "unassigned";
         Iterator<JSONObject> it = jsonArray.iterator();
         while (it.hasNext()) {
             JSONObject obj = it.next();
 
-            if(obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(this.trainer.getGroup())){
+            if (obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(this.trainer.getGroup())) {
 
                 row[0] = obj.get("username").toString();
                 model.addRow(row);
-            }
-
-            else if(obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(aux)){
+            } else if (obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(aux)) {
 
                 row2[0] = obj.get("username").toString();
                 model2.addRow(row2);
@@ -137,65 +135,12 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         /*this.add(textAssigned);
         this.add(textUnassigned);*/
 
-        removeUser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                // i = the index of the selected row
+        removeUser.addActionListener(this);
 
 
-                    // remove a row from jtable
-
-                    try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-                        jsonArray = (JSONArray) parser.parse(reader);
-
-                    } catch (IOException h) {
-                        h.printStackTrace();
-                    } catch (ParseException h) {
-                        h.printStackTrace();
-                    }
 
 
-                    JSONArray auxJS = new JSONArray();
-
-                    Iterator<JSONObject> it = jsonArray.iterator();
-                    while (it.hasNext()) {
-
-                        JSONObject newObj = it.next();
-
-                        if (newObj.get("username").toString().equals(model.getValueAt(table.getSelectedRow(),0).toString())) {
-
-                            JSONObject auxObj = new JSONObject();
-
-                            auxObj.put("username", newObj.get("username"));
-                            auxObj.put("group", "unassigned");
-                            auxObj.put("role", "gymUser");
-                            auxObj.put("password", newObj.get("password"));
-                            auxObj.put("membershipType", newObj.get("membershipType"));
-                            auxJS.add(auxObj);
-                            model.removeRow(table.getSelectedRow());
-
-
-                            // model2.removeRow(table2.getSelectedRow());
-
-
-                        } else {
-
-                            auxJS.add(newObj);
-                        }
-                        try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                            file.write(auxJS.toJSONString());
-                            file.flush();
-                        } catch (IOException h) {
-                            h.printStackTrace();
-                        }
-                    }
-
-
-            }
-        });
-
-        addUser.addActionListener( this);
+        addUser.addActionListener(this);
 
 
 
@@ -299,10 +244,10 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             }
         });*/
 
-        table2.addMouseListener(new MouseAdapter(){
+        table2.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
 
                 // i = the index of the selected row
 
@@ -315,30 +260,30 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
     }
 
-    public void listUsers(){
+    public void listUsers() {
 
-        parser=new JSONParser();
-        ArrayList<String> arrayJSon= new ArrayList<String>();
+        parser = new JSONParser();
+        ArrayList<String> arrayJSon = new ArrayList<String>();
 
         try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-            jsonArray = (JSONArray)parser.parse(reader);
+            jsonArray = (JSONArray) parser.parse(reader);
 
             Iterator<JSONObject> it = jsonArray.iterator();
             while (it.hasNext()) {
 
                 JSONObject obj = it.next();
-                if(obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(this.trainer.getGroup())){
+                if (obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(this.trainer.getGroup())) {
 
                     arrayJSon.add(obj.get("username").toString());
                 }
             }
 
-            for(String s : arrayJSon) {
+            for (String s : arrayJSon) {
 
                 textArea.append(s + "\n");
             }
 
-        }catch (IOException h) {
+        } catch (IOException h) {
             h.printStackTrace();
 
         } catch (ParseException h) {
@@ -349,74 +294,146 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton clicked = (JButton)e.getSource();
-        if(clicked == addUser)
-        {
-            addFrame.setSize(1280,640);
+        JButton clicked = (JButton) e.getSource();
+        if (clicked == addUser) {
+            addFrame.setSize(1280, 640);
             addFrame.setVisible(true);
             addFrame.setLayout(null);
             addFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            addUser2.setBounds(300,300,150,25);
+            addUser2.setBounds(300, 300, 150, 25);
             addFrame.add(addUser2);
             addFrame.add(pane2);
             addUser2.addActionListener(this);
 
         }
-        if(clicked == addUser2 )
+        if(clicked == removeUser)
         {
+            // i = the index of the selected row
 
-            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-                jsonArray = (JSONArray)parser.parse(reader);
+            int i = table.getSelectedRow();
+            if (i >= 0)
+            // remove a row from jtable
+            {
+                try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                    jsonArray = (JSONArray) parser.parse(reader);
 
-            }catch (IOException h) {
-                h.printStackTrace();
-            } catch (ParseException h) {
-                h.printStackTrace();
-            }
+                } catch (IOException h) {
+                    h.printStackTrace();
+                } catch (ParseException h) {
+                    h.printStackTrace();
+                }
 
 
+                JSONArray auxJS = new JSONArray();
 
-            JSONArray auxJS = new JSONArray();
+                Iterator<JSONObject> it = jsonArray.iterator();
+                while (it.hasNext()) {
 
-            Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
+                    JSONObject newObj = it.next();
 
-                JSONObject newObj = it.next();
-
-                    if (newObj.get("username").toString().equals(model2.getValueAt(table2.getSelectedRow(), 0).toString())) {
+                    if (newObj.get("username").toString().equals(model.getValueAt(i, 0).toString())) {
 
                         JSONObject auxObj = new JSONObject();
 
                         auxObj.put("username", newObj.get("username"));
-                        auxObj.put("group", "aba");
+                        auxObj.put("group", "unassigned");
                         auxObj.put("role", "gymUser");
                         auxObj.put("password", newObj.get("password"));
                         auxObj.put("membershipType", newObj.get("membershipType"));
                         auxJS.add(auxObj);
-                        Object row[] = new Object[1];
-                        row[0] = newObj.get("username");
-                        model.addRow(row);
-                       // model2.removeRow(table2.getSelectedRow());
+                        model.removeRow(i);
+
+
+                        // model2.removeRow(table2.getSelectedRow());
 
 
                     } else {
 
                         auxJS.add(newObj);
                     }
+                    try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                        file.write(auxJS.toJSONString());
+                        file.flush();
+                    } catch (IOException h) {
+                        h.printStackTrace();
+                    }
+                }
+
+
+            }
+        }
+
+        if (clicked == addUser2) {
+
+            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                jsonArray = (JSONArray) parser.parse(reader);
+
+            } catch (IOException h) {
+                h.printStackTrace();
+            } catch (ParseException h) {
+                h.printStackTrace();
+            }
+
+
+            JSONArray auxJS = new JSONArray();
+            String aux1="";
+            Iterator<JSONObject> it = jsonArray.iterator();
+            while (it.hasNext()) {
+
+                JSONObject newObj = it.next();
+
+                int i = table2.getSelectedRow();
+
+                if (newObj.get("username").toString().equals(model2.getValueAt(table2.getSelectedRow(), 0).toString())) {
+
+                    JSONObject auxObj = new JSONObject();
+
+                    auxObj.put("username", newObj.get("username"));
+                    auxObj.put("group", "aba");
+                    auxObj.put("role", "gymUser");
+                    auxObj.put("password", newObj.get("password"));
+                    auxObj.put("membershipType", newObj.get("membershipType"));
+                    auxJS.add(auxObj);
+                    aux1 = auxObj.get("username").toString();
+                    Object row[] = new Object[1];
+                    row[0] = newObj.get("username");
+                    model.addRow(row);
+
+
+
+                } else {
+
+                    auxJS.add(newObj);
+                }
 
             }
             System.out.print(auxJS);
 
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxJS.toJSONString());
-                    file.flush();
-                } catch (IOException h) {
-                    h.printStackTrace();
+            try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                file.write(auxJS.toJSONString());
+                file.flush();
+            } catch (IOException h) {
+                h.printStackTrace();
+            }
+            /*String aux = "unassigned";
+            Iterator<JSONObject> iti = jsonArray.iterator();
+            Object[] row = new Object[1];
+            while (iti.hasNext()) {
+                JSONObject obj = iti.next();
+                if (obj.get("role").toString().equals("gymUser") && obj.get("group").toString().equals(aux) && !obj.get("username").toString().equals(aux1)){
+
+
+
+
+
+                    row[0] = obj.get("username").toString();
+                    model2.addRow(row);
+
                 }
 
 
-
-        }
+            }*/
         }
     }
+}
 

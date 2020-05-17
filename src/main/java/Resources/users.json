@@ -1,1 +1,1 @@
-[{"password":"1234","role":"admin","username":"admin"},{"membershipType":null,"password":"mako","role":"gymUser","username":"prostu","group":"aba"},{"password":"florea","role":"trainer","username":"andi","group":"aba"}]
+[{"password":"1234","role":"admin","username":"admin"},{"password":"af","role":"trainer","username":"af","group":"aba"},{"membershipType":null,"password":"ac","role":"gymUser","username":"ac","group":"unassigned"}]

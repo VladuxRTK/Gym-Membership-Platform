@@ -10,6 +10,10 @@ public class TrainerPage extends JFrame implements ActionListener {
 
 	private Trainer trainer;
 	private JButton editUserGroup;
+	private JButton sendOrderSuggestion;
+	private JFrame suggestionFrame;
+	private JTextArea addSuggestiontTextArea;
+	private JButton sendSuggestion;
 
 	public TrainerPage(Trainer trainer)
 	{
@@ -18,13 +22,17 @@ public class TrainerPage extends JFrame implements ActionListener {
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		this.sendOrderSuggestion = new JButton("Send admin order suggestion");
+		suggestionFrame = new JFrame("Suggestion Page");
+		sendOrderSuggestion.addActionListener(this);
+		sendOrderSuggestion.setBounds(300,500,200,50);
 		editUserGroup = new JButton("Edit User Group");
-
+		addSuggestiontTextArea = new JTextArea();
 		editUserGroup.addActionListener(this);
-
+		sendSuggestion = new JButton("Send suggestion");
 		editUserGroup.setBounds(300,300,200,50);
 		this.add(editUserGroup);
+		this.add(sendOrderSuggestion);
 
 	}
 
