@@ -35,8 +35,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
     private JFrame addFrame;
     private JButton addUser2;
     private JScrollPane pane2;
-    private int pos;
-    private JTextField whatToAdd;
+    private int groupSize;
 
 
     public EditUserGroup(Trainer trainer) {
@@ -74,7 +73,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         table.setRowHeight(30);
 
 
-        whatToAdd = new JTextField();
+
         table2.setBackground(Color.LIGHT_GRAY);
         table2.setForeground(Color.black);
         table2.setFont(font);
@@ -264,7 +263,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             public void mouseClicked(MouseEvent e){
 
                 // i = the index of the selected row
-                 pos = table.getSelectedRow();
+
 
                 //textAssigned.setText(model.getValueAt(i, 0).toString());
 
@@ -319,11 +318,11 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             addFrame.add(addUser2);
             addFrame.add(pane2);
             addUser2.addActionListener(this);
-            whatToAdd.setBounds(300,500,100,50);
-            addFrame.add(whatToAdd);
+
         }
-        if(clicked == addUser2)
+        if(clicked == addUser2 )
         {
+
             try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
                 jsonArray = (JSONArray)parser.parse(reader);
 
@@ -333,7 +332,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                 h.printStackTrace();
             }
 
-            String userText = whatToAdd.getText();
+
 
             JSONArray auxJS = new JSONArray();
 
@@ -342,28 +341,26 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
                 JSONObject newObj = it.next();
 
-                if (newObj.get("username").toString().equals(model2.getValueAt(table2.getSelectedRow(),0).toString())) {
+                    if (newObj.get("username").toString().equals(model2.getValueAt(table2.getSelectedRow(), 0).toString())) {
 
-                    JSONObject auxObj = new JSONObject();
+                        JSONObject auxObj = new JSONObject();
 
-                    auxObj.put("username", newObj.get("username"));
-                    auxObj.put("group", "aba");
-                    auxObj.put("role", "gymUser");
-                    auxObj.put("password", newObj.get("password"));
-                    auxObj.put("membershipType", newObj.get("membershipType"));
-                    auxJS.add(auxObj);
-                    Object row[] = new Object[1];
-                    row[0]=newObj.get("username");
-                    model.addRow(row);
-                    model2.removeRow(table2.getSelectedRow());
-
-
+                        auxObj.put("username", newObj.get("username"));
+                        auxObj.put("group", "aba");
+                        auxObj.put("role", "gymUser");
+                        auxObj.put("password", newObj.get("password"));
+                        auxObj.put("membershipType", newObj.get("membershipType"));
+                        auxJS.add(auxObj);
+                        Object row[] = new Object[1];
+                        row[0] = newObj.get("username");
+                        model.addRow(row);
+                       // model2.removeRow(table2.getSelectedRow());
 
 
-                } else {
+                    } else {
 
-                    auxJS.add(newObj);
-                }
+                        auxJS.add(newObj);
+                    }
 
             }
             System.out.print(auxJS);
@@ -374,6 +371,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                 } catch (IOException h) {
                     h.printStackTrace();
                 }
+
 
 
         }
