@@ -1,1 +1,5 @@
-[{"password":"1234","role":"admin","username":"admin"},{"membershipType":null,"password":"andi","role":"gymUser","username":"daniel"}]
+<<<<<<< HEAD
+[{"password":"1234","role":"admin","username":"admin"},{"password":"Radu","role":"trainer","username":"Marinescu","group":"aba"},{"membershipType":null,"password":"user","role":"gymUser","username":"user","group":"aba"},{"membershipType":null,"password":"user","role":"gymUser","username":"altuser","group":"aba"}]
+=======
+[{"password":"1234","role":"admin","username":"admin"},{"membershipType":null,"password":"andi","role":"gymUser","username":"daniel"},{"membershipType":null,"password":"dani","role":"gymUser","username":"dani"}]
+>>>>>>> 6c3b2707f53a5aebbce40b7b931bfba1461cb936

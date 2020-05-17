@@ -1,1 +1,5 @@
-[{"price":"1000$","name":"1 month"},{"price":"12000$","name":"4 month full"},{"price":"7000$","name":"2 month full"},{"price":"50000$","name":"10 months full"}]
+<<<<<<< HEAD
+[{"price":"1000$","name":"1 month"},{"price":"12000$","name":"4 month full"},{"price":"7000$","name":"2 month full"},{"price":"50000$","name":"10 months full"},{"price":"50000$","name":"10 months full"},{"price":"50000$","name":"10 months full"},{"price":"12000$","name":"4 month full"},{"price":"1000$","name":"1 month"},{"price":"0$","name":"Mue bOZDOG"}]
+=======
+[{"price":"1000$","name":"1 month"},{"price":"12000$","name":"4 month full"},{"price":"7000$","name":"2 month full"},{"price":"50000$","name":"10 months full"},{"price":"14000$","name":"spaniel"}]
+>>>>>>> 6c3b2707f53a5aebbce40b7b931bfba1461cb936
