@@ -403,6 +403,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         Object row[] = new Object[1];
                         row[0] = newObj.get("username");
                         model.addRow(row);
+                        //model2.removeRow(i);
                         this.dispose();
 
 
