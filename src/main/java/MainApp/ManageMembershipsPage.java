@@ -138,6 +138,27 @@ public class ManageMembershipsPage extends JFrame{
                 int i = table.getSelectedRow();
                 if(i >= 0){
                     // remove a row from jtable
+
+                    String aux1 = model.getValueAt(i,0).toString();
+                    JSONArray auxJSON = new JSONArray();
+                    Iterator<JSONObject> it = jsonArray.iterator();
+                    while (it.hasNext()) {
+                        JSONObject obj = it.next();
+                        if(!obj.get("name").toString().equals(aux1)) {
+                            auxJSON.add(obj);
+                        }
+
+
+
+                        try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
+                            file.write(auxJSON.toJSONString());
+                            file.flush();
+
+
+                        } catch (IOException h) {
+                            h.printStackTrace();
+                        }
+                    }
                     model.removeRow(i);
                 }
                 else{

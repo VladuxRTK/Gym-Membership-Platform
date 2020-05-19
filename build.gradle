@@ -14,6 +14,10 @@ plugins {
 	id 'java'
 }
 
+apply plugin: 'application'
+mainClassName = 'main.java.MainApp.Main'
+
+
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
@@ -21,6 +25,7 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 }
+
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
@@ -37,10 +42,12 @@ dependencies {
 
 jar {
     manifest {
-        attributes "Main-Class": "Main"
+        attributes "Main-Class": "MainApp.Main"
     }
 
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
+
+
