@@ -60,8 +60,6 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         addFrame = new JFrame("Add gym users");
         addUser2 = new JButton("Add");
 
-        Object[] row = new Object[1];
-        Object[] row2 = new Object[1];
         Object[] columns = {"Assigned"};
         Object[] columns2 = {"Unassigned"};
         model.setColumnIdentifiers(columns);
@@ -96,6 +94,8 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             h.printStackTrace();
         }
 
+        Object[] row = new Object[1];
+        Object[] row2 = new Object[1];
         String aux = "unassigned";
         Iterator<JSONObject> it = jsonArray.iterator();
         while (it.hasNext()) {
@@ -294,9 +294,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         JButton clicked = (JButton) e.getSource();
-
         if (clicked == addUser) {
             addFrame.setSize(1280, 640);
             addFrame.setVisible(true);
@@ -312,7 +310,6 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         {
             // i = the index of the selected row
 
-            // model2.removeRow(table2.getSelectedRow());
             int i = table.getSelectedRow();
             if (i >= 0)
             // remove a row from jtable
@@ -328,16 +325,15 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
 
                 JSONArray auxJS = new JSONArray();
-                JSONObject auxObj;
 
                 Iterator<JSONObject> it = jsonArray.iterator();
                 while (it.hasNext()) {
 
                     JSONObject newObj = it.next();
 
-                    if (newObj.get("username").toString().equals(model.getValueAt(i, 0).toString())) {
+                    if (newObj.get("username").toString().equals(model.getValueAt(table.getSelectedRow(), 0).toString())) {
 
-                        auxObj = new JSONObject();
+                        JSONObject auxObj = new JSONObject();
 
                         auxObj.put("username", newObj.get("username"));
                         auxObj.put("group", "unassigned");
@@ -345,25 +341,24 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         auxObj.put("password", newObj.get("password"));
                         auxObj.put("membershipType", newObj.get("membershipType"));
                         auxJS.add(auxObj);
-                        Object row[] = new Object[1];
-                        row[0] = newObj.get("username");
-                        model2.addRow(row);
+
+
+
+                        // model2.removeRow(table2.getSelectedRow());
 
 
                     } else {
 
                         auxJS.add(newObj);
                     }
+                    try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                        file.write(auxJS.toJSONString());
+                        file.flush();
+                    } catch (IOException h) {
+                        h.printStackTrace();
+                    }
+                    model.removeRow(i);
                 }
-                model.removeRow(i);
-
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxJS.toJSONString());
-                    file.flush();
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
-
 
 
             }
@@ -388,7 +383,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             String aux1="";
             Iterator<JSONObject> it = jsonArray.iterator();
             int i = table2.getSelectedRow();
-            if(i >= 0) {
+            if(i>=0) {
                 while (it.hasNext()) {
 
                     JSONObject newObj = it.next();
@@ -407,8 +402,10 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         aux1 = auxObj.get("username").toString();
                         Object row[] = new Object[1];
                         row[0] = newObj.get("username");
-                        model2.removeRow(table2.getSelectedRow());
                         model.addRow(row);
+                        //model2.removeRow(i);
+                        this.dispose();
+
 
                     } else {
 
@@ -449,3 +446,4 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         }
     }
 }
+
