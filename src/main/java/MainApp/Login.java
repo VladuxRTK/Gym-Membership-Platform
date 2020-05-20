@@ -15,6 +15,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+
+
 public class Login extends JFrame implements ActionListener{
 	//private JPanel panel;
 	private JPasswordField password;

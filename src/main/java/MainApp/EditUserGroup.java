@@ -341,7 +341,9 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         auxObj.put("password", newObj.get("password"));
                         auxObj.put("membershipType", newObj.get("membershipType"));
                         auxJS.add(auxObj);
-
+                        Object row[] = new Object[1];
+                        row[0]=newObj.get("username");
+                        model2.addRow(row);
 
 
                         // model2.removeRow(table2.getSelectedRow());
@@ -357,10 +359,10 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                     } catch (IOException h) {
                         h.printStackTrace();
                     }
-                    model.removeRow(i);
+
                 }
 
-
+                model.removeRow(i);
             }
             else{
                 System.out.println("Error");
@@ -402,9 +404,8 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         aux1 = auxObj.get("username").toString();
                         Object row[] = new Object[1];
                         row[0] = newObj.get("username");
+                        model2.removeRow(table2.getSelectedRow());
                         model.addRow(row);
-                        //model2.removeRow(i);
-                        this.dispose();
 
 
                     } else {
