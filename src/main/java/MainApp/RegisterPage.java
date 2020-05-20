@@ -1,9 +1,14 @@
 package MainApp;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.ShortBufferException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +17,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Iterator;
+
 public class RegisterPage extends JFrame implements ActionListener{
 	private JTextField username;
 	private JPasswordField password;
@@ -116,7 +126,10 @@ public class RegisterPage extends JFrame implements ActionListener{
 	    	JOptionPane.showMessageDialog(this,"Username already taken!");
 	    }
 	    else if(usernameField!=null && passwordField.equals(repeatPasswordField) && clicked == register && radioButton1.isSelected())
-	    {  JSONObject obj = new JSONObject();
+	    {
+
+
+	    	JSONObject obj = new JSONObject();
 	    	obj.put("username", usernameField);
 	    	obj.put("password", passwordField);
 	        obj.put("role" , "trainer");
@@ -138,7 +151,10 @@ public class RegisterPage extends JFrame implements ActionListener{
 	    }
 	    }
 	    else if(usernameField!=null && passwordField.equals(repeatPasswordField) && clicked == register && radioButton2.isSelected())
-	    {  JSONObject obj = new JSONObject();
+	    {
+	    	Encrypt(passwordField);
+
+	    	JSONObject obj = new JSONObject();
 	    	obj.put("username", usernameField);
 	    	obj.put("password", passwordField);
 	        obj.put("role" , "gymUser");
@@ -171,8 +187,48 @@ public class RegisterPage extends JFrame implements ActionListener{
 		h.printStackTrace();
 		} catch (ParseException h) {
 		h.printStackTrace();
+		} catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+			noSuchAlgorithmException.printStackTrace();
+		} catch (ShortBufferException shortBufferException) {
+			shortBufferException.printStackTrace();
+		} catch (NoSuchPaddingException noSuchPaddingException) {
+			noSuchPaddingException.printStackTrace();
+		} catch (BadPaddingException badPaddingException) {
+			badPaddingException.printStackTrace();
+		} catch (NoSuchProviderException noSuchProviderException) {
+			noSuchProviderException.printStackTrace();
+		} catch (IllegalBlockSizeException illegalBlockSizeException) {
+			illegalBlockSizeException.printStackTrace();
+		} catch (InvalidAlgorithmParameterException invalidAlgorithmParameterException) {
+			invalidAlgorithmParameterException.printStackTrace();
+		} catch (InvalidKeyException invalidKeyException) {
+			invalidKeyException.printStackTrace();
 		}
-	
-	
+
+
+	}
+
+	private final void Encrypt(String passwordField) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException, ShortBufferException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeyException {
+
+		JSONObject obj = new JSONObject();
+		char[] pw = password.toString().toCharArray();
+
+		/*Security.addProvider(new org.bouncycastle....);
+		byte[] input = passwordField.getBytes();
+		byte[] keyBytes = "abc".getBytes();
+		byte[] ivBytes = "blablabla".getBytes();
+		SecretKeySpec key = new SecretKeySpec(keyBytes,"DES");
+		IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+		Cipher cipher = Cipher.getInstance("DES/CTR/NoPadding","BC");
+		cipher.init(Cipher.ENCRYPT_MODE,key,ivSpec);
+		byte[] cipherText;
+		cipherText = new byte[cipher.getOutputSize(input.length)];
+		int ctLength = cipher.update(input,0,input.length,cipherText,0);
+		ctLength += cipher.doFinal(cipherText,ctLength);
+		pw.setText(new String(cipherText));*/
+		obj.put("ePassword",pw);
+
+
+
 	}
 }

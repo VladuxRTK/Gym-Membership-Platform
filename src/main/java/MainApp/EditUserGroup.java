@@ -407,10 +407,8 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         aux1 = auxObj.get("username").toString();
                         Object row[] = new Object[1];
                         row[0] = newObj.get("username");
-                        model.addRow(row);
                         model2.removeRow(table2.getSelectedRow());
-                        this.dispose();
-
+                        model.addRow(row);
 
                     } else {
 
