@@ -21,6 +21,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Base64;
 import java.util.Iterator;
 
 public class RegisterPage extends JFrame implements ActionListener{
@@ -105,6 +106,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		String  usernameField = username.getText();
 		String passwordField = password.getText();
+		String encodedPassword = Base64.getEncoder().encodeToString((passwordField).getBytes());
 		String repeatPasswordField = repeatPassword.getText();
 		JButton clicked = (JButton)e.getSource();
 		
@@ -131,7 +133,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 
 	    	JSONObject obj = new JSONObject();
 	    	obj.put("username", usernameField);
-	    	obj.put("password", passwordField);
+	    	obj.put("password", encodedPassword);
 	        obj.put("role" , "trainer");
 	        obj.put("group","aba");
 	        jsonArray.add(obj);
@@ -156,7 +158,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 
 	    	JSONObject obj = new JSONObject();
 	    	obj.put("username", usernameField);
-	    	obj.put("password", passwordField);
+	    	obj.put("password", encodedPassword;
 	        obj.put("role" , "gymUser");
 	        obj.put("membershipType",null);
 	        obj.put("group","unassigned");
