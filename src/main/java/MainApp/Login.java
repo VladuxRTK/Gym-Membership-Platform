@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Base64;
 import java.util.Iterator;
 
 
@@ -116,6 +117,8 @@ public class Login extends JFrame implements ActionListener{
 		String userName = obj.get("username").toString();
 		String password = obj.get("password").toString();
 		String role = obj.get("role").toString();
+		byte[] bytes = Base64.getDecoder().decode(password);
+		password = new String(bytes);
 	
 		
 		if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton1.isSelected() && role.equals("admin"))
