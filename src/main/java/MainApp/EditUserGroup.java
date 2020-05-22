@@ -337,9 +337,35 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             editFrame.setVisible(true);
             editFrame.setLayout(null);
             editFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            workoutText.setBounds(200,300,200,300);
+            workoutText.setBounds(200, 300, 200, 300);
             editFrame.add(saveButton);
             editFrame.add(workoutText);
+
+            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                jsonArray = (JSONArray) parser.parse(reader);
+
+            } catch (IOException h) {
+                h.printStackTrace();
+            } catch (ParseException h) {
+                h.printStackTrace();
+            }
+
+            int i = table.getSelectedRow();
+
+            String aux = model.getValueAt(i, 0).toString();
+
+            Iterator<JSONObject> it = jsonArray.iterator();
+            while (it.hasNext()) {
+
+                JSONObject newObj = it.next();
+
+                if (newObj.get("username").toString().equals(aux)) {
+
+                    workoutText.setText(newObj.get("exercises").toString());
+                }
+
+
+            }
 
         }
 
