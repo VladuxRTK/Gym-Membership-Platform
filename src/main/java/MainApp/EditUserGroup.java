@@ -24,6 +24,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
     private JButton addUser;
     private JButton removeUser;
+    private JButton editWP;
     private JTextArea textArea;
     private JSONParser parser;
     private JSONArray jsonArray;
@@ -33,8 +34,11 @@ public class EditUserGroup extends  JFrame implements ActionListener {
     private JTable table2;
     private DefaultTableModel model2;
     private JFrame addFrame;
+    private JFrame editFrame;
     private JButton addUser2;
     private JScrollPane pane2;
+    private JTextArea workoutText;
+    private JButton saveButton;
     private int groupSize;
 
 
@@ -47,10 +51,17 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         this.setVisible(true);
 
         addUser = new JButton("Add");
+        editWP = new JButton("Edit Workout");
         removeUser = new JButton("Remove");
+        addUser2 = new JButton("Add");
+        saveButton = new JButton("Save");
+
+        workoutText = new JTextArea("");
 
         addUser.setBounds(300, 300, 150, 25);
+        editWP.setBounds(300, 250, 150, 25);
         removeUser.setBounds(300, 200, 150, 25);
+        saveButton.setBounds(400,300,150,25);
 
         model = new DefaultTableModel();
         model2 = new DefaultTableModel();
@@ -58,7 +69,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         table2 = new JTable();
 
         addFrame = new JFrame("Add gym users");
-        addUser2 = new JButton("Add");
+        editFrame = new JFrame("Edit Gym Workout");
 
         Object[] columns = {"Assigned"};
         Object[] columns2 = {"Unassigned"};
@@ -132,17 +143,17 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         // add JTextFields to the jframe
         this.add(removeUser);
         this.add(addUser);
+        this.add(editWP);
         /*this.add(textAssigned);
         this.add(textUnassigned);*/
 
         removeUser.addActionListener(this);
 
-
-
+        editWP.addActionListener(this);
 
         addUser.addActionListener(this);
 
-
+        saveButton.addActionListener(this);
 
            /* @Override
             public void actionPerformed(ActionEvent e) {
@@ -256,6 +267,30 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
             }
         });
+        table.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                // i = the index of the selected row
+
+
+                //textAssigned.setText(model.getValueAt(i, 0).toString());
+
+            }
+        });
+        editFrame.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                // i = the index of the selected row
+
+
+                //textAssigned.setText(model.getValueAt(i, 0).toString());
+
+            }
+        });
 
 
     }
@@ -295,6 +330,19 @@ public class EditUserGroup extends  JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton clicked = (JButton) e.getSource();
+
+        if (clicked == editWP) {
+
+            editFrame.setSize(1280, 640);
+            editFrame.setVisible(true);
+            editFrame.setLayout(null);
+            editFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            workoutText.setBounds(200,300,200,300);
+            editFrame.add(saveButton);
+            editFrame.add(workoutText);
+
+        }
+
         if (clicked == addUser) {
             addFrame.setSize(1280, 640);
             addFrame.setVisible(true);
@@ -331,10 +379,11 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
                     JSONObject newObj = it.next();
 
-                    if (newObj.get("username").toString().equals(model.getValueAt(table.getSelectedRow(), 0).toString())) {
+                    if (newObj.get("username").toString().equals(model.getValueAt(i, 0).toString())) {
 
                         JSONObject auxObj = new JSONObject();
 
+                        auxObj.put("exercises", "unassigned");
                         auxObj.put("username", newObj.get("username"));
                         auxObj.put("group", "unassigned");
                         auxObj.put("role", "gymUser");
@@ -344,7 +393,6 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         Object row[] = new Object[1];
                         row[0]=newObj.get("username");
                         model2.addRow(row);
-
 
                         // model2.removeRow(table2.getSelectedRow());
 
@@ -360,12 +408,74 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                         h.printStackTrace();
                     }
 
-                }
 
+                }
                 model.removeRow(i);
             }
             else{
                 System.out.println("Error");
+            }
+
+        }
+
+        if(clicked == saveButton){
+
+            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                jsonArray = (JSONArray) parser.parse(reader);
+
+            } catch (IOException h) {
+                h.printStackTrace();
+            } catch (ParseException h) {
+                h.printStackTrace();
+            }
+
+            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+                jsonArray = (JSONArray) parser.parse(reader);
+
+            } catch (IOException h) {
+                h.printStackTrace();
+            } catch (ParseException h) {
+                h.printStackTrace();
+            }
+
+            if(table.getSelectedRow() != -1) {
+
+                String name = model.getValueAt(table.getSelectedRow(), 0).toString();
+
+                Iterator<JSONObject> it = jsonArray.iterator();
+
+                JSONArray auxArray = new JSONArray();
+
+                String aux = workoutText.getText();
+
+                while (it.hasNext()) {
+
+                    JSONObject newObj = it.next();
+
+                    if (newObj.get("username").toString().equals(name)) {
+
+                        JSONObject auxObj = new JSONObject();
+
+                        auxObj.put("exercises", aux);
+                        auxObj.put("username", newObj.get("username"));
+                        auxObj.put("group", newObj.get("group"));
+                        auxObj.put("role", "gymUser");
+                        auxObj.put("password", newObj.get("password"));
+                        auxObj.put("membershipType", newObj.get("membershipType"));
+                        auxObj.put("exercises", workoutText.getText());
+                        auxArray.add(auxObj);
+
+                    } else {
+
+                        auxArray.add(newObj);
+                    }
+                }
+                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                    file.write(auxArray.toJSONString());
+                    file.flush();
+                } catch (IOException h) {
+                    h.printStackTrace();
+                }
             }
         }
 
@@ -382,31 +492,32 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
 
             JSONArray auxJS = new JSONArray();
-            String aux1="";
             Iterator<JSONObject> it = jsonArray.iterator();
+            JSONObject newObj;
             int i = table2.getSelectedRow();
-            if(i>=0) {
+            String aux = model2.getValueAt(i,0).toString();
+            if(i >= 0) {
                 while (it.hasNext()) {
 
-                    JSONObject newObj = it.next();
+                    newObj = it.next();
 
 
-                    if (newObj.get("username").toString().equals(model2.getValueAt(i, 0).toString())) {
+                    if (newObj.get("username").toString().equals(aux)){
 
                         JSONObject auxObj = new JSONObject();
 
+                        auxObj.put("exercises", "unassigned");
                         auxObj.put("username", newObj.get("username"));
-                        auxObj.put("group", "aba");
+                        auxObj.put("group", trainer.getGroup());
                         auxObj.put("role", "gymUser");
                         auxObj.put("password", newObj.get("password"));
                         auxObj.put("membershipType", newObj.get("membershipType"));
                         auxJS.add(auxObj);
-                        aux1 = auxObj.get("username").toString();
                         Object row[] = new Object[1];
                         row[0] = newObj.get("username");
-                        model2.removeRow(table2.getSelectedRow());
+                        model2.removeRow(i);
                         model.addRow(row);
-
+                        System.out.println("Your group is " + trainer.getGroup());
 
                     } else {
 
@@ -447,4 +558,3 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         }
     }
 }
-
