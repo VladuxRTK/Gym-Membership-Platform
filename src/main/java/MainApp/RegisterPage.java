@@ -1,5 +1,6 @@
 package MainApp;
 
+import AuxiliaryStuff.JSONReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -35,11 +36,14 @@ public class RegisterPage extends JFrame implements ActionListener{
 	private JRadioButton radioButton1;
 	private JRadioButton radioButton2;
 	private JButton register;
+	private int group;
+	private JSONArray array;
+	private JSONParser parserI;
 	public RegisterPage()
 	{
 		getContentPane().setBackground(new Color(65, 105, 225));
 		getContentPane().setForeground(new Color(65, 105, 225));
-		
+
 		username = new JTextField();
 		username.setBounds(250, 100, 150, 25);
 		password = new JPasswordField();
@@ -89,6 +93,8 @@ public class RegisterPage extends JFrame implements ActionListener{
     	getContentPane().add(repeatPasswordLabel);
     	getContentPane().add(repeatPassword);
     	getContentPane().add(register);
+
+
     	
     	
     	
@@ -109,7 +115,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 		String encodedPassword = Base64.getEncoder().encodeToString((passwordField).getBytes());
 		String repeatPasswordField = repeatPassword.getText();
 		JButton clicked = (JButton)e.getSource();
-		
+		countGroups();
 		JSONParser parser=new JSONParser();
 	    JSONArray jsonArray;
 	    try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
@@ -135,7 +141,7 @@ public class RegisterPage extends JFrame implements ActionListener{
 	    	obj.put("username", usernameField);
 	    	obj.put("password", encodedPassword);
 	        obj.put("role" , "trainer");
-	        obj.put("group","aba");
+	        obj.put("group",Integer.toString(group+1));
 	        jsonArray.add(obj);
 	        
 	    
@@ -231,6 +237,26 @@ public class RegisterPage extends JFrame implements ActionListener{
 		obj.put("ePassword",pw);
 
 
+
+	}
+	public void countGroups()
+	{
+		group = 0;
+		parserI = new JSONParser();
+		array = new JSONArray();
+
+		array=JSONReader.readJSON("src/main/java/Resources/users.json",parserI);
+
+		Iterator<JSONObject> it = array.iterator();
+		while (it.hasNext()) {
+			JSONObject obj = it.next();
+			System.out.println("Here");
+			if(obj.get("role").toString().equals("trainer"))
+			{
+				group++;
+			}
+		}
+		System.out.println(group);
 
 	}
 }
