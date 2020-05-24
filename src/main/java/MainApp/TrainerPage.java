@@ -84,7 +84,7 @@ public class TrainerPage extends JFrame implements ActionListener {
 			JSONObject obj = new JSONObject();
 			obj.put("username",this.trainer.getUsername());
 			obj.put("suggestion",addSuggestiontTextArea.getText());
-			//obj.put("role","trainer");
+			obj.put("role","trainer");
 
 			jsonArray.add(obj);
 			try (FileWriter file = new FileWriter("src/main/java/Resources/suggestions.json")) {

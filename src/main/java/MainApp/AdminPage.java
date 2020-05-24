@@ -53,8 +53,8 @@ public class AdminPage extends JFrame implements ActionListener{
 		
 		if(clicked == orderMenuButton)
 		{
-			new OrderEquipmentPage("Order Equipment",admin);
-			
+			new OrderEquipmentPage(admin);
+
 		}
 		if(clicked == manageMembershipsButton)
 		{
