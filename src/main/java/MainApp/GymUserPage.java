@@ -1,15 +1,29 @@
 package MainApp;
 import AbstractTypes.GymUser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
 
 public class GymUserPage extends JFrame implements ActionListener {
 	private JButton manageAccount;
 	private JButton sendTrainerSuggestion;
 	private JButton seeWorkoutProgamAndClass;
 	private GymUser gymUser;
+	private JFrame seeWorkout;
+	private JLabel groupName;
+	private JTextArea exercises;
+	private JSONArray jsonArray;
+	private JSONParser parser;
 
 	public GymUserPage(GymUser gymUser)
 	{
@@ -37,6 +51,18 @@ public class GymUserPage extends JFrame implements ActionListener {
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		parser = new JSONParser();
+		exercises = new JTextArea();
+		exercises.setEditable(false);
+		exercises.setBounds(640,220,300,100);
+		seeWorkout = new JFrame();
+		seeWorkout.setLayout(null);
+		seeWorkout.setSize(1280,640);
+		seeWorkout.add(exercises);
+		seeWorkout.setTitle("Workout and group");
+		jsonArray = new JSONArray();
+		seeWorkout.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
 	}
 
