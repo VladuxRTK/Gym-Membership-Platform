@@ -1,15 +1,29 @@
 package MainApp;
 import AbstractTypes.GymUser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Iterator;
 
 public class GymUserPage extends JFrame implements ActionListener {
 	private JButton manageAccount;
 	private JButton sendTrainerSuggestion;
 	private JButton seeWorkoutProgamAndClass;
 	private GymUser gymUser;
+	private JFrame seeWorkout;
+	private JLabel groupName;
+	private JTextArea exercises;
+	private JSONArray jsonArray;
+	private JSONParser parser;
 
 	public GymUserPage(GymUser gymUser)
 	{
@@ -29,6 +43,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		seeWorkoutProgamAndClass.setBounds(960,400,250,90);
 		seeWorkoutProgamAndClass.addActionListener(this);
 		seeWorkoutProgamAndClass.setFont(new Font("Tahoma", Font.PLAIN,20));
+
 		this.add(seeWorkoutProgamAndClass);
 		this.add(sendTrainerSuggestion);
 		this.add(manageAccount);
@@ -37,6 +52,19 @@ public class GymUserPage extends JFrame implements ActionListener {
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.getContentPane().setBackground(new Color(65, 105, 225));
+		parser = new JSONParser();
+		exercises = new JTextArea();
+		exercises.setEditable(false);
+		exercises.setBounds(640,220,300,100);
+		seeWorkout = new JFrame();
+		seeWorkout.setLayout(null);
+		seeWorkout.setSize(1280,640);
+		seeWorkout.add(exercises);
+		seeWorkout.setTitle("Workout and group");
+		jsonArray = new JSONArray();
+		seeWorkout.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
 	}
 
@@ -44,9 +72,36 @@ public class GymUserPage extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton clicked = (JButton)e.getSource();
-		if(clicked == manageAccount);
+		if(clicked == manageAccount)
 		{
 			new EditAccount(this.gymUser);
 		}
+		if(clicked == seeWorkoutProgamAndClass)
+		{
+			seeWorkout.getContentPane().setBackground(new Color(65, 105, 225));
+			seeWorkout.setVisible(true);
+			try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+				jsonArray = (JSONArray) parser.parse(reader);
+
+			} catch (IOException h) {
+				h.printStackTrace();
+			} catch (ParseException h) {
+				h.printStackTrace();
+			}
+			Iterator<JSONObject> it = jsonArray.iterator();
+			while(it.hasNext())
+			{
+				JSONObject obj = it.next();
+				if(obj.get("username").toString().equals(this.gymUser.getUsername()))
+				{
+					exercises.setText(obj.get("exercises").toString());
+					groupName = new JLabel("Group " + obj.get("group").toString());
+					groupName.setBounds(420,220,200,100);
+					groupName.setFont(new Font("Tahoma", Font.PLAIN, 40));
+					seeWorkout.add(groupName);
+				}
+			}
+		}
+
 	}
 }
