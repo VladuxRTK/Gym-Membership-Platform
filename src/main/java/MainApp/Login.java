@@ -2,6 +2,8 @@ package MainApp;
 import AbstractTypes.Administrator;
 import AbstractTypes.GymUser;
 import AbstractTypes.Trainer;
+import AuxiliaryStuff.JSONReader;
+import Exceptions.InformationNotCorrect;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Base64;
@@ -71,7 +74,41 @@ public class Login extends JFrame implements ActionListener{
     	createAccountButton.addActionListener(this);
     	
     		
-    	
+
+    	JSONArray array = new JSONArray();
+    	JSONParser loginParser = new JSONParser();
+		array=JSONReader.readJSON("src/main/java/Resources/users.json",loginParser);
+		Iterator<JSONObject> it = array.iterator();
+		JSONArray auxJson = new JSONArray();
+		boolean isEncrypted=false;
+		while(it.hasNext())
+		{
+			JSONObject obj = it.next();
+			if(obj.get("role").toString().equals("admin") && obj.get("isEncrypted").toString().equals("false"))
+			{
+				JSONObject auxObj = new JSONObject();
+				String encodedPassword = Base64.getEncoder().encodeToString((obj.get("password").toString()).getBytes());
+				auxObj.put("username",obj.get("username").toString());
+				auxObj.put("role","admin");
+				auxObj.put("password",encodedPassword);
+				auxObj.put("isEncrypted","true");
+				auxJson.add(auxObj);
+				isEncrypted=true;
+			}
+			else auxJson.add(obj);
+		}
+
+		if(isEncrypted) {
+			try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+				file.write(auxJson.toJSONString());
+				file.flush();
+
+				dispose();
+			} catch (IOException h) {
+				h.printStackTrace();
+			}
+		}
+
     	
     	ButtonGroup bg = new ButtonGroup();
     	bg.add(radioButton1);
@@ -102,70 +139,15 @@ public class Login extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		String passwordField = password.getText();
-		String usernameField = username.getText();
-		//JButton clicked = (JButton)e.getSource();
+
 		JButton clicked = (JButton)e.getSource();
-		boolean isLogged=false;
-		JSONParser parser = new JSONParser();
-		try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-		JSONArray jsonArray = (JSONArray)parser.parse(reader);
-		//System.out.println(jsonArray);
-		Iterator<JSONObject> it = jsonArray.iterator();
-		while (it.hasNext()) {
-		JSONObject obj = it.next();
-		String userName = obj.get("username").toString();
-		String password = obj.get("password").toString();
-		String role = obj.get("role").toString();
-		byte[] bytes = Base64.getDecoder().decode(password);
-		password = new String(bytes);
-	
-		
-		if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton1.isSelected() && role.equals("admin"))
-		{
-			Administrator admin = new Administrator("admin");
-			
-			JOptionPane.showMessageDialog(this,"Logged in as admin");
-			new AdminPage(admin);
-			isLogged=true;
-			dispose();
-			
-		}
-		else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton2.isSelected() && role.equals("trainer"))
-		{
-			Trainer trainer = new Trainer(usernameField,obj.get("group").toString());
+		try{
+			login(e);
 
-
-			JOptionPane.showMessageDialog(this,"Logged in as trainer");
-			isLogged=true;
-			new TrainerPage(trainer);
-			dispose();
+		} catch (InformationNotCorrect informationNotCorrect) {
+			informationNotCorrect.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Account not found! Verify the information or create a new account!", "alert", JOptionPane.ERROR_MESSAGE);
 		}
-		else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton3.isSelected() && role.equals("gymUser"))
-		{
-			
-			GymUser user=new GymUser(usernameField,passwordField);
-			
-			isLogged=true;
-			JOptionPane.showMessageDialog(this,"Logged in as user");
-			new GymUserPage(user);
-			dispose();
-		}
-	
-		
-		//roleList.add(obj.get("role").toString());
-		
-		}
-		} catch (IOException h) {
-		h.printStackTrace();
-		} catch (ParseException h) {
-		h.printStackTrace();
-		}
-		if(isLogged==false && clicked != createAccountButton)
-		{
-			JOptionPane.showMessageDialog(this,"Account not found! Check your credetentials or create an account!");
-		}
-		
 		if(clicked == createAccountButton)
 		{
 			new RegisterPage();
@@ -194,6 +176,85 @@ public class Login extends JFrame implements ActionListener{
 		}*/
 		
 		
+	}
+
+	public void login(ActionEvent e) throws InformationNotCorrect
+	{
+		String passwordField = password.getText();
+		String usernameField = username.getText();
+		//JButton clicked = (JButton)e.getSource();
+		JButton clicked = (JButton)e.getSource();
+		String password;
+		String userName;
+		String role;
+		boolean isLogged=false;
+		JSONParser parser = new JSONParser();
+		try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+			JSONArray jsonArray = (JSONArray)parser.parse(reader);
+			//System.out.println(jsonArray);
+			Iterator<JSONObject> it = jsonArray.iterator();
+			while (it.hasNext()) {
+				JSONObject obj = it.next();
+				//if(obj.get("role").toString().equals("admin")){
+				/* userName = obj.get("username").toString();
+				 password = obj.get("password").toString();
+				 role = obj.get("role").toString();*/
+
+
+				//}
+				//else
+				//{
+					 userName = obj.get("username").toString();
+					 password = obj.get("password").toString();
+					role = obj.get("role").toString();
+					byte[] bytes = Base64.getDecoder().decode(password);
+					password = new String(bytes);
+				//}
+
+				if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton1.isSelected() && role.equals("admin"))
+				{
+					Administrator admin = new Administrator("admin");
+
+					JOptionPane.showMessageDialog(this,"Logged in as admin");
+					new AdminPage(admin);
+					isLogged=true;
+					dispose();
+
+				}
+				else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton2.isSelected() && role.equals("trainer"))
+				{
+					Trainer trainer = new Trainer(usernameField,obj.get("group").toString());
+
+
+					JOptionPane.showMessageDialog(this,"Logged in as trainer");
+					isLogged=true;
+					new TrainerPage(trainer);
+					dispose();
+				}
+				else if(userName.equals(usernameField) && password.equals(passwordField)  && radioButton3.isSelected() && role.equals("gymUser"))
+				{
+
+					GymUser user=new GymUser(usernameField,passwordField);
+
+					isLogged=true;
+					JOptionPane.showMessageDialog(this,"Logged in as user");
+					new GymUserPage(user);
+					dispose();
+				}
+
+
+				//roleList.add(obj.get("role").toString());
+
+			}
+		} catch (IOException h) {
+			h.printStackTrace();
+		} catch (ParseException h) {
+			h.printStackTrace();
+		}
+		if(isLogged==false && clicked != createAccountButton)
+		{
+			throw new InformationNotCorrect();
+		}
 	}
     
     
