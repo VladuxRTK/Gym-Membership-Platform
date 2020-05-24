@@ -4,10 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 public class JSONReader {
     public static JSONArray readJSON(String path, JSONParser parser)
@@ -23,5 +20,16 @@ public class JSONReader {
             e.printStackTrace();
         }
         return jsonArray;
+    }
+
+    public static void writeJSON(String path,JSONArray array)
+    {
+
+        try (FileWriter file = new FileWriter(path)) {
+            file.write(array.toJSONString());
+            file.flush();
+        } catch (IOException h) {
+            h.printStackTrace();
+        }
     }
 }
