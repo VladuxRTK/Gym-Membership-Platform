@@ -1,5 +1,6 @@
 package MainApp;
 import AbstractTypes.GymUser;
+import AuxiliaryStuff.JSONReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,6 +25,10 @@ public class GymUserPage extends JFrame implements ActionListener {
 	private JTextArea exercises;
 	private JSONArray jsonArray;
 	private JSONParser parser;
+	private JFrame sendTrainerSuggestionFrame;
+	private JTextArea suggestionArea;
+	private JButton send;
+
 
 	public GymUserPage(GymUser gymUser)
 	{
@@ -65,6 +70,18 @@ public class GymUserPage extends JFrame implements ActionListener {
 		jsonArray = new JSONArray();
 		seeWorkout.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+		send = new JButton("Send");
+		send.setBounds(500,400,250,90);
+		suggestionArea = new JTextArea();
+		suggestionArea.setBounds(475,150,300,200);
+		send.addActionListener(this);
+		sendTrainerSuggestionFrame = new JFrame("Send suggestion");
+		sendTrainerSuggestionFrame.setSize(1280,640);
+		sendTrainerSuggestionFrame.setLayout(null);
+		sendTrainerSuggestionFrame.add(send);
+		sendTrainerSuggestionFrame.add(suggestionArea);
+		sendTrainerSuggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
 	}
 
@@ -101,6 +118,38 @@ public class GymUserPage extends JFrame implements ActionListener {
 					seeWorkout.add(groupName);
 				}
 			}
+		}
+		if (clicked == sendTrainerSuggestion)
+		{
+			sendTrainerSuggestionFrame.setVisible(true);
+
+		}
+		if(clicked == send)
+		{
+			String suggestion = suggestionArea.getText();
+			JSONArray jsonArray2 = new JSONArray();
+			JSONArray suggestionArray = new JSONArray();
+			JSONParser auxParser = new JSONParser();
+			jsonArray2= JSONReader.readJSON("src/main/java/Resources/users.json",auxParser);
+			suggestionArray = JSONReader.readJSON("src/main/java/Resources/suggestions.json",auxParser);
+			Iterator<JSONObject> it = jsonArray2.iterator();
+			while(it.hasNext())
+			{
+				JSONObject obj = it.next();
+				if(obj.get("username").toString().equals(this.gymUser.getUsername()) && obj.get("role").toString().equals("gymUser") && !obj.get("group").equals("unassgined"))
+				{
+					JSONObject auxObj = new JSONObject();
+					auxObj.put("username",this.gymUser.getUsername());
+					auxObj.put("group",obj.get("group").toString());
+					auxObj.put("suggestion",suggestion);
+					auxObj.put("role","gymUser");
+					suggestionArray.add(auxObj);
+
+				}
+
+			}
+			JSONReader.writeJSON("src/main/java/Resources/suggestions.json",suggestionArray);
+
 		}
 
 	}

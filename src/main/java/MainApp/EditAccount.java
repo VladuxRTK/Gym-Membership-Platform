@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Base64;
 import java.util.Iterator;
 
 import org.json.simple.JSONArray;
@@ -119,6 +120,7 @@ public class EditAccount extends JFrame implements ActionListener {
                 JSONObject obj = it.next();
                 if (obj.get("username").toString().equals(gymUser.getUsername())) {
                     JSONObject auxObj = new JSONObject();
+                    passwordField= Base64.getEncoder().encodeToString((passwordField).getBytes());
                     auxObj.put("username", usernameField);
                     auxObj.put("password", passwordField);
                     auxObj.put("role", "gymUser");
