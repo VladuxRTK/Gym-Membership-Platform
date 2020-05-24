@@ -24,6 +24,10 @@ public class GymUserPage extends JFrame implements ActionListener {
 	private JTextArea exercises;
 	private JSONArray jsonArray;
 	private JSONParser parser;
+	private JFrame sendTrainerSuggestionFrame;
+	private JTextArea suggestionArea;
+	private JButton send;
+
 
 	public GymUserPage(GymUser gymUser)
 	{
@@ -65,6 +69,18 @@ public class GymUserPage extends JFrame implements ActionListener {
 		jsonArray = new JSONArray();
 		seeWorkout.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+		send = new JButton("Send");
+		send.setBounds(500,400,250,90);
+		suggestionArea = new JTextArea();
+		suggestionArea.setBounds(475,150,300,200);
+
+		sendTrainerSuggestionFrame = new JFrame("Send suggestion");
+		sendTrainerSuggestionFrame.setSize(1280,640);
+		sendTrainerSuggestionFrame.setLayout(null);
+		sendTrainerSuggestionFrame.add(send);
+		sendTrainerSuggestionFrame.add(suggestionArea);
+		sendTrainerSuggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
 
 	}
 
@@ -101,6 +117,10 @@ public class GymUserPage extends JFrame implements ActionListener {
 					seeWorkout.add(groupName);
 				}
 			}
+		}
+		if (clicked == sendTrainerSuggestion)
+		{
+			sendTrainerSuggestionFrame.setVisible(true);
 		}
 
 	}
