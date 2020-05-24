@@ -76,6 +76,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		}
 		if(clicked == seeWorkoutProgamAndClass)
 		{
+			seeWorkout.getContentPane().setBackground(new Color(65, 105, 225));
 			seeWorkout.setVisible(true);
 			try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
 				jsonArray = (JSONArray) parser.parse(reader);
