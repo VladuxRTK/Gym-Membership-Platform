@@ -43,6 +43,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		seeWorkoutProgamAndClass.setBounds(960,400,250,90);
 		seeWorkoutProgamAndClass.addActionListener(this);
 		seeWorkoutProgamAndClass.setFont(new Font("Tahoma", Font.PLAIN,20));
+
 		this.add(seeWorkoutProgamAndClass);
 		this.add(sendTrainerSuggestion);
 		this.add(manageAccount);
@@ -51,6 +52,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.getContentPane().setBackground(new Color(65, 105, 225));
 		parser = new JSONParser();
 		exercises = new JTextArea();
 		exercises.setEditable(false);
