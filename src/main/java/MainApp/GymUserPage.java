@@ -70,9 +70,35 @@ public class GymUserPage extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton clicked = (JButton)e.getSource();
-		if(clicked == manageAccount);
+		if(clicked == manageAccount)
 		{
 			new EditAccount(this.gymUser);
 		}
+		if(clicked == seeWorkoutProgamAndClass)
+		{
+			seeWorkout.setVisible(true);
+			try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+				jsonArray = (JSONArray) parser.parse(reader);
+
+			} catch (IOException h) {
+				h.printStackTrace();
+			} catch (ParseException h) {
+				h.printStackTrace();
+			}
+			Iterator<JSONObject> it = jsonArray.iterator();
+			while(it.hasNext())
+			{
+				JSONObject obj = it.next();
+				if(obj.get("username").toString().equals(this.gymUser.getUsername()))
+				{
+					exercises.setText(obj.get("exercises").toString());
+					groupName = new JLabel("Group " + obj.get("group").toString());
+					groupName.setBounds(420,220,200,100);
+					groupName.setFont(new Font("Tahoma", Font.PLAIN, 40));
+					seeWorkout.add(groupName);
+				}
+			}
+		}
+
 	}
 }
