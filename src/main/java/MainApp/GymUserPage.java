@@ -1,5 +1,6 @@
 package MainApp;
 import AbstractTypes.GymUser;
+import AuxiliaryStuff.JSONReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -73,7 +74,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		send.setBounds(500,400,250,90);
 		suggestionArea = new JTextArea();
 		suggestionArea.setBounds(475,150,300,200);
-
+		send.addActionListener(this);
 		sendTrainerSuggestionFrame = new JFrame("Send suggestion");
 		sendTrainerSuggestionFrame.setSize(1280,640);
 		sendTrainerSuggestionFrame.setLayout(null);
@@ -121,6 +122,32 @@ public class GymUserPage extends JFrame implements ActionListener {
 		if (clicked == sendTrainerSuggestion)
 		{
 			sendTrainerSuggestionFrame.setVisible(true);
+
+		}
+		if(clicked == send)
+		{
+			String suggestion = suggestionArea.getText();
+			JSONArray jsonArray2 = new JSONArray();
+			JSONArray suggestionArray = new JSONArray();
+			JSONParser auxParser = new JSONParser();
+			jsonArray2= JSONReader.readJSON("src/main/java/Resources/users.json",auxParser);
+			suggestionArray = JSONReader.readJSON("src/main/java/Resources/suggestion.json",auxParser);
+			Iterator<JSONObject> it = jsonArray2.iterator();
+			while(it.hasNext())
+			{
+				JSONObject obj = it.next();
+				if(obj.get("username").toString().equals(this.gymUser.getUsername()) && !obj.get("group").equals("unassgined"))
+				{
+					JSONObject auxObj = new JSONObject();
+					auxObj.put("username",this.gymUser.getUsername());
+					auxObj.put("group",obj.get("group").toString());
+					auxObj.put("suggestion",suggestion);
+					suggestionArray.add(auxObj);
+
+				}
+
+			}
+
 		}
 
 	}
