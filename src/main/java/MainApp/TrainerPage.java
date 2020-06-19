@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
@@ -26,6 +27,7 @@ public class TrainerPage extends JFrame implements ActionListener {
 	public TrainerPage(Trainer trainer)
 	{
 		this.trainer = trainer;
+		this.setTitle("Trainer page");
 		this.setSize(1280,640);
 		this.setLayout(null);
 		this.setVisible(true);
@@ -33,14 +35,19 @@ public class TrainerPage extends JFrame implements ActionListener {
 		this.sendOrderSuggestion = new JButton("Send admin order suggestion");
 		suggestionFrame = new JFrame("Suggestion Page");
 		sendOrderSuggestion.addActionListener(this);
-		sendOrderSuggestion.setBounds(300,500,200,50);
+		sendOrderSuggestion.setBounds(1000,300,200,50);
 		editUserGroup = new JButton("Edit User Group");
 		addSuggestiontTextArea = new JTextArea();
 		editUserGroup.addActionListener(this);
 		sendSuggestion = new JButton("Send suggestion");
-		editUserGroup.setBounds(300,300,200,50);
+		editUserGroup.setBounds(50,300,200,50);
 		this.add(editUserGroup);
 		this.add(sendOrderSuggestion);
+		getContentPane().setBackground(new Color(65, 105, 225));
+		ImageIcon icon = new ImageIcon("src/main/java/Resources/weightlifting.png");
+		JLabel background = new JLabel(icon);
+		background.setBounds(325,100,600,500);
+		this.add(background);
 
 	}
 
