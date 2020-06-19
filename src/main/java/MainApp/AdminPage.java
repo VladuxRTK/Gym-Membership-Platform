@@ -16,18 +16,24 @@ public class AdminPage extends JFrame implements ActionListener{
 	private  JLabel backgroundImageLabel;
 	
 	public AdminPage(Administrator admin) {
+		initialize(admin);
+
+
+	}
+
+	private void initialize(Administrator admin) {
 		JLabel text = new JLabel("Welcome " +admin.getUsername() + "!");
 		this.admin = admin;
 		text.setBounds(450,0,600,150);
 		text.setFont(new Font("Helvetica Neue", Font.BOLD, 40));
 
-		
+
 		orderMenuButton = new JButton("Order Equipment");
 		orderMenuButton.setBounds(10,450,200,50);
-		
+
 		manageMembershipsButton = new JButton("Manage Memberships");
 		manageMembershipsButton.setBounds(1050,450,200,50);
-		
+
 		orderMenuButton.addActionListener(this);
 		manageMembershipsButton.addActionListener(this);
 		ImageIcon background = new ImageIcon("src/main/java/Resources/gym (4).png");
@@ -42,9 +48,6 @@ public class AdminPage extends JFrame implements ActionListener{
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.getContentPane().setBackground(new Color(65, 105, 225));
-
-
-		
 	}
 	
 	/*public static void main(String[] args)

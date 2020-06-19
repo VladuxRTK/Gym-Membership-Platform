@@ -13,6 +13,7 @@ import java.io.Reader;
 import java.util.Base64;
 import java.util.Iterator;
 
+import AuxiliaryStuff.JSONReader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -36,19 +37,30 @@ public class EditAccount extends JFrame implements ActionListener {
     private JSONParser parser;
     private JButton change;
     private JSONArray jsonArray;
-
+    private JButton membership;
     public EditAccount(GymUser gymUser) {
+        initialize(gymUser);
+
+    }
+
+    private void initialize(GymUser gymUser) {
         this.gymUser = gymUser;
 
         this.setTitle("Edit Account");
         changeAccountDetails = new JButton("Change details");
         changeAccountDetails.setBounds(50, 400, 250, 90);
         changeAccountDetails.addActionListener(this);
+        membership = new JButton("Change membership");
+        membership.setBounds(500,400,250,90);
+        membership.addActionListener(this);
+
+
         this.setSize(800, 600);
         this.setVisible(true);
         this.setLayout(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(changeAccountDetails);
+        this.add(membership);
 
         change = new JButton("Change");
         change.setBounds(275,300,100,30);
@@ -85,7 +97,6 @@ public class EditAccount extends JFrame implements ActionListener {
 
         parser = new JSONParser();
         getContentPane().setBackground(new Color(65, 105, 225));
-
     }
 
     @Override
@@ -94,69 +105,79 @@ public class EditAccount extends JFrame implements ActionListener {
         if (clicked == changeAccountDetails) {
             changeDetails.setVisible(true);
         }
+        if(clicked == membership)
+        {
+            new ManageMembership(this.gymUser);
+        }
         if (clicked == change) {
 
-            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+           /* try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
                 jsonArray = (JSONArray) parser.parse(reader);
 
             } catch (IOException | ParseException h) {
                 h.printStackTrace();
-            }
-            System.out.println("Here");
-            System.out.print(jsonArray);
-            String usernameField;
-            if(!username.getText().equals(""))
-            usernameField = username.getText();
-            else usernameField = this.gymUser.getUsername();
-            String passwordField;
-            if(!password.getText().equals(""))
-                passwordField = password.getText();
-            else passwordField = this.gymUser.getPassword();
-            System.out.println(passwordField);
-            String repeatPasswordField = repeatPassword.getText();
-            System.out.println(usernameField);
-            JSONArray auxJSON = new JSONArray();
-            //  if (usernameField != null && passwordField == null && repeatPasswordField == null) {
-            Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
-                JSONObject obj = it.next();
-                if (obj.get("username").toString().equals(gymUser.getUsername())) {
-                    JSONObject auxObj = new JSONObject();
-                    passwordField= Base64.getEncoder().encodeToString((passwordField).getBytes());
-                    auxObj.put("username", usernameField);
-                    auxObj.put("password", passwordField);
-                    auxObj.put("role", "gymUser");
-                    auxObj.put("membershipType", null);
-                    auxObj.put("group", "aba");
-                    auxJSON.add(auxObj);
-                } else {
-                    auxJSON.add(obj);
-                }
-            }
-
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxJSON.toJSONString());
-                    file.flush();
+            }*/
+            jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
+            changeAccountDetails(jsonArray);
 
 
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
-
-
-                //  }
+            //  }
 
         }
     }
-    public void changeAccountDetails() {
-        try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
+
+    private void changeAccountDetails(JSONArray jsonArray) {
+        System.out.println("Here");
+        System.out.print(jsonArray);
+        String usernameField;
+        if(!username.getText().equals(""))
+        usernameField = username.getText();
+        else usernameField = this.gymUser.getUsername();
+        String passwordField;
+        if(!password.getText().equals(""))
+            passwordField = password.getText();
+        else passwordField = this.gymUser.getPassword();
+        System.out.println(passwordField);
+        String repeatPasswordField = repeatPassword.getText();
+        System.out.println(usernameField);
+        JSONArray auxJSON = new JSONArray();
+        //  if (usernameField != null && passwordField == null && repeatPasswordField == null) {
+        Iterator<JSONObject> it = jsonArray.iterator();
+        while (it.hasNext()) {
+            JSONObject obj = it.next();
+            if (obj.get("username").toString().equals(gymUser.getUsername())) {
+                JSONObject auxObj = new JSONObject();
+                passwordField= Base64.getEncoder().encodeToString((passwordField).getBytes());
+                auxObj.put("username", usernameField);
+                auxObj.put("password", passwordField);
+                auxObj.put("role", "gymUser");
+                auxObj.put("membershipType", null);
+                auxObj.put("group", "aba");
+                auxJSON.add(auxObj);
+            } else {
+                auxJSON.add(obj);
+            }
+        }
+
+        try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+            file.write(auxJSON.toJSONString());
+            file.flush();
+
+
+        } catch (IOException h) {
+            h.printStackTrace();
+        }
+    }
+   /* public void changeAccountDetails() {
+       /* try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
             jsonArray = (JSONArray) parser.parse(reader);
 
         } catch (IOException h) {
             h.printStackTrace();
         } catch (ParseException h) {
             h.printStackTrace();
-        }
+        }*/
+        /*jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
         System.out.println("Here");
         String usernameField = username.getText();
         String passwordField = password.getText();
@@ -192,5 +213,5 @@ public class EditAccount extends JFrame implements ActionListener {
 
 
         }
-    }
+    }*/
 }
