@@ -144,6 +144,8 @@ public class EditUserGroup extends  JFrame implements ActionListener {
         this.add(removeUser);
         this.add(addUser);
         this.add(editWP);
+
+        getContentPane().setBackground(new Color(65, 105, 225));
         /*this.add(textAssigned);
         this.add(textUnassigned);*/
 

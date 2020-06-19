@@ -3,6 +3,7 @@ package MainApp;
 import AbstractTypes.GymUser;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileReader;
@@ -83,6 +84,7 @@ public class EditAccount extends JFrame implements ActionListener {
         changeDetails.add(change);
 
         parser = new JSONParser();
+        getContentPane().setBackground(new Color(65, 105, 225));
 
     }
 

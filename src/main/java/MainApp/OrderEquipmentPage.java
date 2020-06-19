@@ -2,6 +2,7 @@ package MainApp;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -29,9 +30,14 @@ public class OrderEquipmentPage extends JFrame implements ActionListener {
 	private ArrayList<String> suggestionList = new ArrayList<String>();
 	private Administrator admin;
 	private DefaultTableModel model;
+	private JLabel backgroundImageLabel;
 	
 	public OrderEquipmentPage(Administrator admin)
 	{
+		initialize(admin);
+	}
+
+	private void initialize(Administrator admin) {
 		this.admin = admin;
 		this.setTitle("Order Equipment Page");
 		orderArea = new JTextArea();
@@ -39,7 +45,7 @@ public class OrderEquipmentPage extends JFrame implements ActionListener {
 		orderButton = new JButton("Order equipment");
 		orderArea = new JTextArea();
 		checkTrainerSuggestion = new JButton("Check trainer suggestion");
-		orderButton.setBounds(50,200,200,100);
+		orderButton.setBounds(30,200,200,100);
 		orderButton.addActionListener(this);
 		placeOrder.setBounds(175,400,200,100);
 
@@ -48,30 +54,37 @@ public class OrderEquipmentPage extends JFrame implements ActionListener {
 		orderFrame.add(orderArea);
 		orderFrame.setSize(600,600);
 		orderFrame.setLayout(null);
+		orderFrame.getContentPane().setBackground(new Color(65, 105, 225));
 		orderFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		orderFrame.add(placeOrder);
+		ImageIcon orderIcon = new ImageIcon("src/main/java/Resources/dumbbell (3).png");
+		JLabel orderBackgroundLabel = new JLabel(orderIcon);
+		orderBackgroundLabel.setBounds(175,0,200,200);
+		orderFrame.add(orderBackgroundLabel);
 		placeOrder.addActionListener(this);
 		checkTrainerSuggestion.addActionListener(this);
-		checkTrainerSuggestion.setBounds(325,200,200,100);
+		checkTrainerSuggestion.setBounds(1030,200,200,100);
 		this.add(orderButton);
 		this.add(checkTrainerSuggestion);
-		this.setSize(600,600);
+		this.setSize(1280,640);
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		model = new DefaultTableModel();
 
 		checkSuggestionFrame = new JFrame("Suggestions from trainers");
+		checkSuggestionFrame.getContentPane().setBackground(new Color(65, 105, 225));
 		checkSuggestionFrame.setSize(800,800);
 		checkSuggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		createTable();
+		ImageIcon background = new ImageIcon("src/main/java/Resources/weight.png");
+		getContentPane().setBackground(new Color(65, 105, 225));
+		backgroundImageLabel = new JLabel(background);
+		backgroundImageLabel.setBounds(200,100,800,500);
+		this.add(backgroundImageLabel);
 	}
-	
-	
-	
-	
 
-	
+
 	public void createTable()
 	{
 		JSONArray jsonArray = new JSONArray();

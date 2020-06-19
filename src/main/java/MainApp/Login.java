@@ -32,6 +32,7 @@ public class Login extends JFrame implements ActionListener{
     private JRadioButton radioButton1;
     private JRadioButton radioButton2;
     private JRadioButton radioButton3;
+    private JLabel backgroundLabel;
   
     
     public Login()
@@ -72,6 +73,10 @@ public class Login extends JFrame implements ActionListener{
     	
     	loginButton.addActionListener(this);
     	createAccountButton.addActionListener(this);
+		ImageIcon background = new ImageIcon("src/main/java/Resources/gym (2).png");
+		backgroundLabel = new JLabel(background);
+		backgroundLabel.setBounds(200,0,200,100);
+		this.add(backgroundLabel);
     	
     		
 

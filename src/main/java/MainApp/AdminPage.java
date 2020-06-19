@@ -1,9 +1,10 @@
 package MainApp;
 import javax.swing.JLabel;
 
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.*;
 import AbstractTypes.Administrator;
 
@@ -12,11 +13,12 @@ public class AdminPage extends JFrame implements ActionListener{
 	private JButton orderMenuButton;
 	private JButton manageMembershipsButton;
 	private Administrator admin;
+	private  JLabel backgroundImageLabel;
 	
 	public AdminPage(Administrator admin) {
-		JLabel text = new JLabel("Welcome " +admin.getUsername());
+		JLabel text = new JLabel("Welcome " +admin.getUsername() + "!");
 		this.admin = admin;
-		text.setBounds(400,0,500,200);
+		text.setBounds(450,0,600,150);
 		text.setFont(new Font("Helvetica Neue", Font.BOLD, 40));
 
 		
@@ -28,15 +30,20 @@ public class AdminPage extends JFrame implements ActionListener{
 		
 		orderMenuButton.addActionListener(this);
 		manageMembershipsButton.addActionListener(this);
-		
-		this.setSize(1280,1024);
+		ImageIcon background = new ImageIcon("src/main/java/Resources/gym (4).png");
+		this.setSize(1280,640);
 		this.add(text);
 		this.add(orderMenuButton);
 		this.add(manageMembershipsButton);
+		backgroundImageLabel = new JLabel(background);
+		backgroundImageLabel.setBounds(200,100,860,500);
+		this.add(backgroundImageLabel);
 		this.setLayout(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	
+		this.getContentPane().setBackground(new Color(65, 105, 225));
+
+
 		
 	}
 	

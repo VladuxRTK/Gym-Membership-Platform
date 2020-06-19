@@ -225,6 +225,7 @@ public class ManageMembershipsPage extends JFrame{
                 }
             }
         });
+        getContentPane().setBackground(new Color(65, 105, 225));
         
 	}
 	
