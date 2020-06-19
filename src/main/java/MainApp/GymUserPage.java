@@ -82,6 +82,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		sendTrainerSuggestionFrame.add(send);
 		sendTrainerSuggestionFrame.add(suggestionArea);
 		sendTrainerSuggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		sendTrainerSuggestionFrame.getContentPane().setBackground(new Color(65, 105, 225));
 
 
 	}
@@ -111,7 +112,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 			while(it.hasNext())
 			{
 				JSONObject obj = it.next();
-				if(obj.get("username").toString().equals(this.gymUser.getUsername()))
+				if(obj.get("username").toString().equals(this.gymUser.getUsername()) && !obj.get("group").toString().equals("unassigned"))
 				{
 					exercises.setText(obj.get("exercises").toString());
 					groupName = new JLabel("Group " + obj.get("group").toString());
@@ -119,6 +120,13 @@ public class GymUserPage extends JFrame implements ActionListener {
 					groupName.setFont(new Font("Tahoma", Font.PLAIN, 40));
 					seeWorkout.add(groupName);
 				}
+				else if(obj.get("username").toString().equals(this.gymUser.getUsername()) && obj.get("group").toString().equals("unassigned"))
+				{
+					seeWorkout.setVisible(false);
+					JOptionPane.showMessageDialog(null, "You are not in any group","alert" ,JOptionPane.ERROR_MESSAGE);
+
+				}
+
 			}
 		}
 		if (clicked == sendTrainerSuggestion)

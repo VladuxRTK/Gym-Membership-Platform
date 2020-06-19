@@ -48,12 +48,14 @@ public class EditAccount extends JFrame implements ActionListener {
 
         this.setTitle("Edit Account");
         changeAccountDetails = new JButton("Change details");
-        changeAccountDetails.setBounds(50, 400, 250, 90);
+        changeAccountDetails.setBounds(25, 400, 250, 90);
         changeAccountDetails.addActionListener(this);
         membership = new JButton("Change membership");
         membership.setBounds(500,400,250,90);
         membership.addActionListener(this);
-
+        ImageIcon img = new ImageIcon("src/main/java/Resources/gym (9).png");
+        JLabel background = new JLabel(img);
+        background.setBounds(200,100,350,300);
 
         this.setSize(800, 600);
         this.setVisible(true);
@@ -61,6 +63,7 @@ public class EditAccount extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(changeAccountDetails);
         this.add(membership);
+        this.add(background);
 
         change = new JButton("Change");
         change.setBounds(275,300,100,30);
