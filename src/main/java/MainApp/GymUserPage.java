@@ -126,31 +126,35 @@ public class GymUserPage extends JFrame implements ActionListener {
 		}
 		if(clicked == send)
 		{
-			String suggestion = suggestionArea.getText();
-			JSONArray jsonArray2 = new JSONArray();
-			JSONArray suggestionArray = new JSONArray();
-			JSONParser auxParser = new JSONParser();
-			jsonArray2= JSONReader.readJSON("src/main/java/Resources/users.json",auxParser);
-			suggestionArray = JSONReader.readJSON("src/main/java/Resources/suggestions.json",auxParser);
-			Iterator<JSONObject> it = jsonArray2.iterator();
-			while(it.hasNext())
-			{
-				JSONObject obj = it.next();
-				if(obj.get("username").toString().equals(this.gymUser.getUsername()) && obj.get("role").toString().equals("gymUser") && !obj.get("group").equals("unassgined"))
-				{
-					JSONObject auxObj = new JSONObject();
-					auxObj.put("username",this.gymUser.getUsername());
-					auxObj.put("group",obj.get("group").toString());
-					auxObj.put("suggestion",suggestion);
-					auxObj.put("role","gymUser");
-					suggestionArray.add(auxObj);
-
-				}
-
-			}
-			JSONReader.writeJSON("src/main/java/Resources/suggestions.json",suggestionArray);
+			sendSuggestion();
 
 		}
 
+	}
+
+	private void sendSuggestion() {
+		String suggestion = suggestionArea.getText();
+		JSONArray jsonArray2 = new JSONArray();
+		JSONArray suggestionArray = new JSONArray();
+		JSONParser auxParser = new JSONParser();
+		jsonArray2= JSONReader.readJSON("src/main/java/Resources/users.json",auxParser);
+		suggestionArray = JSONReader.readJSON("src/main/java/Resources/suggestions.json",auxParser);
+		Iterator<JSONObject> it = jsonArray2.iterator();
+		while(it.hasNext())
+		{
+			JSONObject obj = it.next();
+			if(obj.get("username").toString().equals(this.gymUser.getUsername()) && obj.get("role").toString().equals("gymUser") && !obj.get("group").equals("unassgined"))
+			{
+				JSONObject auxObj = new JSONObject();
+				auxObj.put("username",this.gymUser.getUsername());
+				auxObj.put("group",obj.get("group").toString());
+				auxObj.put("suggestion",suggestion);
+				auxObj.put("role","gymUser");
+				suggestionArray.add(auxObj);
+
+			}
+
+		}
+		JSONReader.writeJSON("src/main/java/Resources/suggestions.json",suggestionArray);
 	}
 }

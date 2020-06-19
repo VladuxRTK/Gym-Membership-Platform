@@ -364,6 +364,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                 if (newObj.get("username").toString().equals(aux)) {
 
                     workoutText.setText(newObj.get("exercises").toString());
+                    break;
                 }
 
 
