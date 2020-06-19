@@ -28,6 +28,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 	private JFrame sendTrainerSuggestionFrame;
 	private JTextArea suggestionArea;
 	private JButton send;
+	private JButton membership;
 
 
 	public GymUserPage(GymUser gymUser)
@@ -93,6 +94,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		{
 			new EditAccount(this.gymUser);
 		}
+
 		if(clicked == seeWorkoutProgamAndClass)
 		{
 			seeWorkout.getContentPane().setBackground(new Color(65, 105, 225));

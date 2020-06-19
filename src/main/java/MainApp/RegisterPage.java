@@ -317,7 +317,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 				obj.put("username", usernameField);
 				obj.put("password", encodedPassword);
 				obj.put("role", "gymUser");
-				obj.put("membershipType", null);
+				obj.put("membershipType", "unassigned");
 				obj.put("group", "unassigned");
 				jsonArray.add(obj);
 

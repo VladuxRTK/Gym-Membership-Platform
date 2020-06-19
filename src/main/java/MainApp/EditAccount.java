@@ -37,7 +37,7 @@ public class EditAccount extends JFrame implements ActionListener {
     private JSONParser parser;
     private JButton change;
     private JSONArray jsonArray;
-
+    private JButton membership;
     public EditAccount(GymUser gymUser) {
         initialize(gymUser);
 
@@ -50,11 +50,17 @@ public class EditAccount extends JFrame implements ActionListener {
         changeAccountDetails = new JButton("Change details");
         changeAccountDetails.setBounds(50, 400, 250, 90);
         changeAccountDetails.addActionListener(this);
+        membership = new JButton("Change membership");
+        membership.setBounds(500,400,250,90);
+        membership.addActionListener(this);
+
+
         this.setSize(800, 600);
         this.setVisible(true);
         this.setLayout(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.add(changeAccountDetails);
+        this.add(membership);
 
         change = new JButton("Change");
         change.setBounds(275,300,100,30);
@@ -98,6 +104,10 @@ public class EditAccount extends JFrame implements ActionListener {
         JButton clicked = (JButton) e.getSource();
         if (clicked == changeAccountDetails) {
             changeDetails.setVisible(true);
+        }
+        if(clicked == membership)
+        {
+            new ManageMembership(this.gymUser);
         }
         if (clicked == change) {
 
