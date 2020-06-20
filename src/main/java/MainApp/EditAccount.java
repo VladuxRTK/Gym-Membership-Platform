@@ -38,10 +38,49 @@ public class EditAccount extends JFrame implements ActionListener {
     private JButton change;
     private JSONArray jsonArray;
     private JButton membership;
+    private String message;
     public EditAccount(GymUser gymUser) {
         initialize(gymUser);
 
     }
+
+    public void setUsername(String text)
+    {
+        this.username.setText(text);
+        message = "username";
+    }
+
+    public void setPassword(String text)
+    {
+        this.password.setText(text);
+        message ="password";
+    }
+    public void setRepeatPassword(String text)
+    {
+        this.repeatPassword.setText(text);
+        message = "repeat";
+    }
+    public String getUsername()
+    {
+        message="username";
+        return username.getText();
+    }
+    public String getPassword()
+    {
+        message="password";
+        return password.getText();
+    }
+    public String getRepeatPassword()
+    {
+        message="repeat";
+        return repeatPassword.getText();
+    }
+
+    public String getMessage()
+    {
+        return this.message;
+    }
+
 
     private void initialize(GymUser gymUser) {
         this.gymUser = gymUser;
@@ -121,8 +160,8 @@ public class EditAccount extends JFrame implements ActionListener {
             } catch (IOException | ParseException h) {
                 h.printStackTrace();
             }*/
-            jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
-            changeAccountDetails(jsonArray);
+
+            changeAccountDetails();
             JOptionPane.showMessageDialog(this,"Account details changed!");
             changeDetails.dispose();
 
@@ -132,7 +171,8 @@ public class EditAccount extends JFrame implements ActionListener {
         }
     }
 
-    private void changeAccountDetails(JSONArray jsonArray) {
+    public void changeAccountDetails() {
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
         System.out.println("Here");
         System.out.print(jsonArray);
         String usernameField;
@@ -157,9 +197,11 @@ public class EditAccount extends JFrame implements ActionListener {
                 auxObj.put("username", usernameField);
                 auxObj.put("password", passwordField);
                 auxObj.put("role", "gymUser");
-                auxObj.put("membershipType", null);
-                auxObj.put("group", "aba");
+                auxObj.put("membershipType", obj.get("membershipType"));
+                auxObj.put("group", obj.get("group"));
+                auxObj.put("exercises",obj.get("exercises"));
                 auxJSON.add(auxObj);
+                message = "changed";
             } else {
                 auxJSON.add(obj);
             }

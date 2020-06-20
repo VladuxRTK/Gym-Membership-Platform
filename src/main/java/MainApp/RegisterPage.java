@@ -41,6 +41,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 	private int group;
 	private JSONArray array;
 	private JSONParser parserI;
+	private String getMessage;
 
 	public RegisterPage() {
 		getContentPane().setBackground(new Color(65, 105, 225));
@@ -103,20 +104,40 @@ public class RegisterPage extends JFrame implements ActionListener {
 		this.setVisible(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
+	public void setPasswordText(String text)
+	{
+		password.setText(text);
+	}
+	public void setRepeatPasswordText(String text)
+	{
+		repeatPassword.setText(text);
+	}
+	public void setUsernameText(String text)
+	{
+		username.setText(text);
+	}
+
+	public void setRadioButton1()
+	{
+		radioButton1.setSelected(true);
+	}
+	public void setRadioButton2()
+	{
+		radioButton1.setSelected(true);
+	}
+	public String getMessageString()
+	{
+		return getMessage;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
-		try {
-			registerAccount(e);
-		} catch (UserAlreadyTaken userAlreadyTaken) {
-			userAlreadyTaken.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Username already taken!");
-		} catch (PasswordMustMatch passwordMustMatch) {
-			passwordMustMatch.printStackTrace();
-			JOptionPane.showMessageDialog(this, "Password must match!");
-		}
+	JButton clicked = (JButton)e.getSource();
+	if(clicked == register)
+	{
+		handleRegister();
+	}
 
 
 		/*String  usernameField = username.getText();
@@ -266,13 +287,29 @@ public class RegisterPage extends JFrame implements ActionListener {
 		System.out.println(group);
 
 	}
+	public void handleRegister()
+	{
+		try {
+			registerAccount();
+			JOptionPane.showMessageDialog(this, "Account created successfully!");
+			getMessage = "Account created successfully!";
+		} catch (UserAlreadyTaken userAlreadyTaken) {
+			userAlreadyTaken.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Username already taken!");
+			getMessage = "Username already taken!";
+		} catch (PasswordMustMatch passwordMustMatch) {
+			passwordMustMatch.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Password must match!");
+			getMessage = "Password must match!";
+		}
+	}
 
-	public void registerAccount(ActionEvent e) throws UserAlreadyTaken,PasswordMustMatch {
+	public void registerAccount() throws UserAlreadyTaken,PasswordMustMatch {
 		String usernameField = username.getText();
 		String passwordField = password.getText();
 		String encodedPassword = Base64.getEncoder().encodeToString((passwordField).getBytes());
 		String repeatPasswordField = repeatPassword.getText();
-		JButton clicked = (JButton) e.getSource();
+
 		countGroups();
 		JSONParser parser = new JSONParser();
 		JSONArray jsonArray;
@@ -290,7 +327,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 			if (isThere) {
 				//JOptionPane.showMessageDialog(this,"Username already taken!");
 				throw new UserAlreadyTaken("Username already taken!");
-			} else if (usernameField != null && passwordField.equals(repeatPasswordField) && clicked == register && radioButton1.isSelected()) {
+			} else if (usernameField != null && passwordField.equals(repeatPasswordField)  && radioButton1.isSelected()) {
 
 
 				JSONObject obj = new JSONObject();
@@ -298,7 +335,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 				obj.put("password", encodedPassword);
 				obj.put("role", "trainer");
 				obj.put("group", Integer.toString(group + 1));
-				obj.put("exercises","unassigned");
+				//obj.put("exercises","unassigned");
 				jsonArray.add(obj);
 
 
@@ -310,7 +347,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 				} catch (IOException h) {
 					h.printStackTrace();
 				}
-			} else if (usernameField != null && passwordField.equals(repeatPasswordField) && clicked == register && radioButton2.isSelected()) {
+			} else if (usernameField != null && passwordField.equals(repeatPasswordField)  && radioButton2.isSelected()) {
 				//Encrypt(passwordField);
 
 				JSONObject obj = new JSONObject();
@@ -318,6 +355,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 				obj.put("password", encodedPassword);
 				obj.put("role", "gymUser");
 				obj.put("membershipType", "unassigned");
+				obj.put("exercises","unassigned");
 				obj.put("group", "unassigned");
 				jsonArray.add(obj);
 
@@ -331,7 +369,7 @@ public class RegisterPage extends JFrame implements ActionListener {
 					h.printStackTrace();
 				}
 
-			} else if (usernameField != null && !passwordField.equals(repeatPasswordField) && clicked == register && (radioButton2.isSelected() || radioButton1.isSelected())) {
+			} else if (usernameField != null && !passwordField.equals(repeatPasswordField)  && (radioButton2.isSelected() || radioButton1.isSelected())) {
 				//JOptionPane.showMessageDialog(this, "Password must match!");
 				throw new PasswordMustMatch();
 			}

@@ -23,6 +23,7 @@ public class TrainerPage extends JFrame implements ActionListener {
 	private JFrame suggestionFrame;
 	private JTextArea addSuggestiontTextArea;
 	private JButton sendSuggestion;
+	private String message;
 
 	public TrainerPage(Trainer trainer)
 	{
@@ -56,55 +57,76 @@ public class TrainerPage extends JFrame implements ActionListener {
 
 		JButton clicked = (JButton) e.getSource();
 
-		if(clicked == editUserGroup){
+		if (clicked == editUserGroup) {
 
 			new EditUserGroup(trainer);
 		}
 
-		if(clicked == sendOrderSuggestion) {
+		if (clicked == sendOrderSuggestion) {
 
-			suggestionFrame.setSize(700,600);
+			suggestionFrame.setSize(700, 600);
 			suggestionFrame.setVisible(true);
 			suggestionFrame.setLayout(null);
 			suggestionFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			addSuggestiontTextArea.setBounds(300,100,200,100);
-			sendSuggestion.setBounds(300,400,100,50);
+			addSuggestiontTextArea.setBounds(300, 100, 200, 100);
+			sendSuggestion.setBounds(300, 400, 100, 50);
 			suggestionFrame.add(addSuggestiontTextArea);
 			suggestionFrame.add(sendSuggestion);
 			sendSuggestion.addActionListener(this);
 
 
-
-
 		}
-		if(clicked == sendSuggestion)
-		{
-			JSONArray jsonArray = new JSONArray();
-			JSONParser parser = new JSONParser();
-
-			try (Reader reader = new FileReader("src/main/java/Resources/suggestions.json")) {
-				jsonArray = (JSONArray) parser.parse(reader);
-
-			} catch (IOException | ParseException h) {
-				h.printStackTrace();
-			}
-			JSONObject obj = new JSONObject();
-			obj.put("username",this.trainer.getUsername());
-			obj.put("suggestion",addSuggestiontTextArea.getText());
-			obj.put("role","trainer");
-
-			jsonArray.add(obj);
-			try (FileWriter file = new FileWriter("src/main/java/Resources/suggestions.json")) {
-				file.write(jsonArray.toJSONString());
-				file.flush();
-
-
-			} catch (IOException h) {
-				h.printStackTrace();
-			}
-			System.out.println(jsonArray);
+		if (clicked == sendSuggestion) {
+			sendSuggestionToAdmin();
 		}
 	}
 
+	public void setSuggestionText(String text)
+	{
+		addSuggestiontTextArea.setText(text);
+		message = "set";
+	}
+	public String getSuggestionText()
+	{
+		message="get";
 
-}
+		return addSuggestiontTextArea.getText();
+	}
+	public String getMessage()
+	{
+		return message;
+	}
+
+	public void  sendSuggestionToAdmin()
+	{
+
+		JSONArray jsonArray = new JSONArray();
+		JSONParser parser = new JSONParser();
+
+		try (Reader reader = new FileReader("src/main/java/Resources/suggestions.json")) {
+			jsonArray = (JSONArray) parser.parse(reader);
+
+		} catch (IOException | ParseException h) {
+			h.printStackTrace();
+		}
+		JSONObject obj = new JSONObject();
+		obj.put("username",this.trainer.getUsername());
+		obj.put("suggestion",addSuggestiontTextArea.getText());
+		obj.put("role","trainer");
+
+		jsonArray.add(obj);
+		try (FileWriter file = new FileWriter("src/main/java/Resources/suggestions.json")) {
+			file.write(jsonArray.toJSONString());
+			file.flush();
+			message = "Added";
+
+
+		} catch (IOException h) {
+			h.printStackTrace();
+		}
+		System.out.println(jsonArray);
+	}
+	}
+
+
+
