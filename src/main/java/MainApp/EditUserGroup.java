@@ -40,6 +40,8 @@ public class EditUserGroup extends  JFrame implements ActionListener {
     private JTextArea workoutText;
     private JButton saveButton;
     private int groupSize;
+    private String name;
+    private String message;
 
 
     public EditUserGroup(Trainer trainer) {
@@ -296,6 +298,10 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
 
     }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
     /*public void listUsers() {
 
@@ -458,53 +464,12 @@ public class EditUserGroup extends  JFrame implements ActionListener {
                 h.printStackTrace();
             }
 
-            try (Reader reader = new FileReader("src/main/java/Resources/users.json")) {
-                jsonArray = (JSONArray) parser.parse(reader);
 
-            } catch (IOException h) {
-                h.printStackTrace();
-            } catch (ParseException h) {
-                h.printStackTrace();
-            }
 
             if(table.getSelectedRow() != -1) {
+                name = model.getValueAt(table.getSelectedRow(), 0).toString();
 
-                String name = model.getValueAt(table.getSelectedRow(), 0).toString();
-
-                Iterator<JSONObject> it = jsonArray.iterator();
-
-                JSONArray auxArray = new JSONArray();
-
-                String aux = workoutText.getText();
-
-                while (it.hasNext()) {
-
-                    JSONObject newObj = it.next();
-
-                    if (newObj.get("username").toString().equals(name)) {
-
-                        JSONObject auxObj = new JSONObject();
-
-                        auxObj.put("exercises", aux);
-                        auxObj.put("username", newObj.get("username"));
-                        auxObj.put("group", newObj.get("group"));
-                        auxObj.put("role", "gymUser");
-                        auxObj.put("password", newObj.get("password"));
-                        auxObj.put("membershipType", newObj.get("membershipType"));
-                        auxObj.put("exercises", workoutText.getText());
-                        auxArray.add(auxObj);
-
-                    } else {
-
-                        auxArray.add(newObj);
-                    }
-                }
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxArray.toJSONString());
-                    file.flush();
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
+                editWorkout();
             }
         }
 
@@ -585,5 +550,56 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
             }*/
         }
+    }
+    public void editWorkout()
+    {
+
+        Iterator<JSONObject> it = jsonArray.iterator();
+
+        JSONArray auxArray = new JSONArray();
+
+        String aux = workoutText.getText();
+
+        while (it.hasNext()) {
+
+            JSONObject newObj = it.next();
+
+            if (newObj.get("username").toString().equals(name)) {
+
+                JSONObject auxObj = new JSONObject();
+
+                auxObj.put("exercises", aux);
+                auxObj.put("username", newObj.get("username"));
+                auxObj.put("group", newObj.get("group"));
+                auxObj.put("role", "gymUser");
+                auxObj.put("password", newObj.get("password"));
+                auxObj.put("membershipType", newObj.get("membershipType"));
+                auxObj.put("exercises", workoutText.getText());
+                auxArray.add(auxObj);
+
+            } else {
+
+                auxArray.add(newObj);
+            }
+        }
+        try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+            file.write(auxArray.toJSONString());
+            file.flush();
+            message = "Added workout";
+        } catch (IOException h) {
+            h.printStackTrace();
+        }
+    }
+    public void setWorkoutText(String text)
+    {
+        this.workoutText.setText(text);
+    }
+    public String getMessage()
+    {
+        return message;
+    }
+    public String getWorkoutText()
+    {
+        return workoutText.getText();
     }
 }
