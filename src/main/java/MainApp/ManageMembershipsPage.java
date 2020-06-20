@@ -1,4 +1,5 @@
 package MainApp;
+import org.apache.commons.math3.ml.neuralnet.UpdateAction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -26,7 +27,7 @@ public class ManageMembershipsPage extends JFrame{
 	private JTextField textType;
 	private JTextField textPrice;
 	private String message;
-	private String aux1;
+	private String type;
 	public ManageMembershipsPage(String name)
 	{
 	    super(name);
@@ -155,34 +156,14 @@ public class ManageMembershipsPage extends JFrame{
              
                 // i = the index of the selected row
                 int i = table.getSelectedRow();
+                type = model.getValueAt(i,0).toString();
 
                 if(i >= 0)
                 {
-                   aux1 = model.getValueAt(i,0).toString();
-                   JSONArray auxJSON = new JSONArray();
-                   model.setValueAt(textType.getText(), i, 0);
-                   model.setValueAt(textPrice.getText(), i, 1);
-                   Iterator<JSONObject> it = jsonArray.iterator();
-                   while (it.hasNext()) {
-               		JSONObject obj = it.next();
-               		if(obj.get("name").toString().equals(aux1))
-        			{
-        				JSONObject auxObj = new JSONObject();
-        				auxObj.put("name",textType.getText());
-        				auxObj.put("price",textPrice.getText());
-        				auxJSON.add(auxObj);
-        			}
-               		else {auxJSON.add(obj);}
 
-            	    try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
-            	    file.write(auxJSON.toJSONString());
-            	    file.flush();
-
-
-            	    } catch (IOException h) {
-            	    h.printStackTrace();
-            	    }
-                   }
+                    model.setValueAt(textType.getText(), i, 0);
+                    model.setValueAt(textPrice.getText(), i, 1);
+                    update();
 
                 }
                 else{
@@ -243,37 +224,74 @@ public class ManageMembershipsPage extends JFrame{
         }
 
     }
+    public void setType(String type)
+    {
+        this.type = type;
+    }
     public void deleteMembership() {
         int i = table.getSelectedRow();
+        type = model.getValueAt(i, 0).toString();
         if (i >= 0) {
             // remove a row from jtable
 
-            aux1 = model.getValueAt(i, 0).toString();
-
-            JSONArray auxJSON = new JSONArray();
-            Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
-                JSONObject obj = it.next();
-                if (!obj.get("name").toString().equals(aux1)) {
-                    auxJSON.add(obj);
-                }
 
 
-                try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
-                    file.write(auxJSON.toJSONString());
-                    file.flush();
-
-
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
-            }
+             delete();
             model.removeRow(i);
-            message="Deleted";
+
         }
 
                 else{
         System.out.println("Delete Error");
+    }
+}
+public void delete()
+{
+    JSONArray auxJSON = new JSONArray();
+    Iterator<JSONObject> it = jsonArray.iterator();
+    while (it.hasNext()) {
+        JSONObject obj = it.next();
+        if (!obj.get("name").toString().equals(type)) {
+            auxJSON.add(obj);
+        }
+
+
+        try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
+            file.write(auxJSON.toJSONString());
+            file.flush();
+            message="deleted";
+
+
+        } catch (IOException h) {
+            h.printStackTrace();
+        }
+    }
+}
+public void update()
+{
+    JSONArray auxJSON = new JSONArray();
+
+    Iterator<JSONObject> it = jsonArray.iterator();
+    while (it.hasNext()) {
+        JSONObject obj = it.next();
+        if(obj.get("name").toString().equals(type))
+        {
+            JSONObject auxObj = new JSONObject();
+            auxObj.put("name",textType.getText());
+            auxObj.put("price",textPrice.getText());
+            auxJSON.add(auxObj);
+        }
+        else {auxJSON.add(obj);}
+
+        try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
+            file.write(auxJSON.toJSONString());
+            file.flush();
+            message="updated";
+
+
+        } catch (IOException h) {
+            h.printStackTrace();
+        }
     }
 }
         }
