@@ -29,25 +29,29 @@ public class ManageMembershipsPageTest {
         manage= new ManageMembershipsPage("admin");
         manage.setTextType("10 months");
        // manage.setTextPrice("11000$");
-        assertEquals("10 months",manage.getMessage());
-        manage.getTextType();
-        assertEquals("type",manage.getMessage());
+
+
+        assertEquals("10 months", manage.getTextType());
         manage.setTextPrice("11000$");
-        assertEquals("price",manage.getMessage());
-        manage.getTextPrice();
-        assertEquals("price",manage.getMessage());
-        mamna
+
+
+        assertEquals("11000$",manage.getTextPrice());
+
+        manage.setType("10 months");
+        assertEquals("10 months",manage.getTypeA());
+
 
     }
 
+    @Test
     public void deleteMembershipTest()
     {
         JSONArray jsonArray;
         JSONParser parser = new JSONParser();
         jsonArray = JSONReader.readJSON("src/main/java/Resources/memberships.json",parser);
         manage = new ManageMembershipsPage("admin");
-        manage.setType("4 months");
-        manage.deleteMembership();
+        manage.setType("1 month");
+        manage.delete();
         assertEquals("deleted",manage.getMessage());
         JSONReader.writeJSON("src/main/java/Resources/memberships.json",jsonArray);
 

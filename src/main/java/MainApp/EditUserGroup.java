@@ -48,6 +48,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
         this.trainer = trainer;
 
+        this.setTitle("Edit user group");
         this.setSize(1280, 640);
         this.setLayout(null);
         this.setVisible(true);

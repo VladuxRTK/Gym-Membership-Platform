@@ -129,7 +129,21 @@ public class ManageMembershipsPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
             
                 // i = the index of the selected row
-                deleteMembership();
+                int i = table.getSelectedRow();
+                type = model.getValueAt(i, 0).toString();
+                if (i >= 0) {
+                    // remove a row from jtable
+
+
+
+                    delete();
+                    model.removeRow(i);
+
+                }
+
+                else{
+                    System.out.println("Delete Error");
+                }
 
         }});
         
@@ -177,23 +191,26 @@ public class ManageMembershipsPage extends JFrame{
 	public void setTextType(String text)
     {
         this.textType.setText(text);
-        message = "type";
+
     }
     public void setTextPrice(String text)
     {
         this.textPrice.setText(text);
-        message="price";
-    }
 
+    }
+    public String getTypeA()
+    {
+        return type;
+    }
     public String getTextType()
     {
-        message = "type";
+
         return textType.getText();
 
     }
     public String getTextPrice()
     {
-        message = "price";
+
         return textPrice.getText();
     }
     public String getMessage()
@@ -229,21 +246,7 @@ public class ManageMembershipsPage extends JFrame{
         this.type = type;
     }
     public void deleteMembership() {
-        int i = table.getSelectedRow();
-        type = model.getValueAt(i, 0).toString();
-        if (i >= 0) {
-            // remove a row from jtable
 
-
-
-             delete();
-            model.removeRow(i);
-
-        }
-
-                else{
-        System.out.println("Delete Error");
-    }
 }
 public void delete()
 {
@@ -255,7 +258,7 @@ public void delete()
             auxJSON.add(obj);
         }
 
-
+    }
         try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
             file.write(auxJSON.toJSONString());
             file.flush();
@@ -265,7 +268,7 @@ public void delete()
         } catch (IOException h) {
             h.printStackTrace();
         }
-    }
+
 }
 public void update()
 {
