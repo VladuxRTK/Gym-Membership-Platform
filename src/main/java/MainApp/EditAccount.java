@@ -97,6 +97,7 @@ public class EditAccount extends JFrame implements ActionListener {
         changeDetails.add(repeatPassword);
         changeDetails.add(repeatPasswordLabel);
         changeDetails.add(change);
+        changeDetails.getContentPane().setBackground(new Color(65, 105, 225));
 
         parser = new JSONParser();
         getContentPane().setBackground(new Color(65, 105, 225));
@@ -122,6 +123,8 @@ public class EditAccount extends JFrame implements ActionListener {
             }*/
             jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
             changeAccountDetails(jsonArray);
+            JOptionPane.showMessageDialog(this,"Account details changed!");
+            changeDetails.dispose();
 
 
             //  }
