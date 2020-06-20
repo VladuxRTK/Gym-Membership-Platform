@@ -29,6 +29,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 	private JTextArea suggestionArea;
 	private JButton send;
 	private JButton membership;
+	private String message;
 
 
 	public GymUserPage(GymUser gymUser)
@@ -87,6 +88,16 @@ public class GymUserPage extends JFrame implements ActionListener {
 
 	}
 
+	public void setSuggestionText(String text)
+	{
+		this.suggestionArea.setText(text);
+	}
+	public String getMessage()
+	{
+		return message;
+	}
+	public String getSuggestionText(){return this.suggestionArea.getText();}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -142,7 +153,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 
 	}
 
-	private void sendSuggestion() {
+	public void sendSuggestion() {
 		String suggestion = suggestionArea.getText();
 		JSONArray jsonArray2 = new JSONArray();
 		JSONArray suggestionArray = new JSONArray();
@@ -161,7 +172,12 @@ public class GymUserPage extends JFrame implements ActionListener {
 				auxObj.put("suggestion",suggestion);
 				auxObj.put("role","gymUser");
 				suggestionArray.add(auxObj);
+				message = "suggestion";
 
+			}
+			else if(obj.get("username").toString().equals(this.gymUser.getUsername()) && obj.get("role").toString().equals("gymUser") && obj.get("group").equals("unassgined")){
+				sendTrainerSuggestionFrame.setVisible(false);
+				JOptionPane.showMessageDialog(null, "You are not in any group","alert" ,JOptionPane.ERROR_MESSAGE);
 			}
 
 		}

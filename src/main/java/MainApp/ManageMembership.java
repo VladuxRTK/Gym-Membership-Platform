@@ -25,6 +25,8 @@ public class ManageMembership extends JFrame implements ActionListener {
     private JButton btnDelete;
     private JTable table;
     private JButton btnAdd;
+    private String name;
+    private String message;
 
     public ManageMembership(GymUser gymUser) {
         this.gymUser = gymUser;
@@ -49,7 +51,7 @@ public class ManageMembership extends JFrame implements ActionListener {
 
         // create JTextFields
         textType = new JTextField();
-       // textPrice = new JTextField();
+        // textPrice = new JTextField();
 
 
         // create JButtons
@@ -59,7 +61,7 @@ public class ManageMembership extends JFrame implements ActionListener {
         //JButton btnUpdate = new JButton("Update");
 
         textType.setBounds(20, 220, 100, 25);
-       // textPrice.setBounds(20, 250, 100, 25);
+        // textPrice.setBounds(20, 250, 100, 25);
         btnAdd.addActionListener(this);
         btnAdd.setBounds(150, 220, 100, 25);
         //btnUpdate.setBounds(150, 265, 100, 25);
@@ -102,13 +104,27 @@ public class ManageMembership extends JFrame implements ActionListener {
         JButton clicked = (JButton) e.getSource();
         if (clicked == btnAdd) {
             addMembership();
-          this.dispose();
+            this.dispose();
             //displayInfo();
         }
         if (clicked == btnDelete) {
             deleteMembership();
-           this.dispose();
+            this.dispose();
         }
+    }
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public String getName()
+    {
+        return this.name;
     }
 
     public void displayInfo() {
@@ -140,42 +156,12 @@ public class ManageMembership extends JFrame implements ActionListener {
         // add row to the model
         //System.out.println(this.gymUser.getUsername());
         int i = table.getSelectedRow();
-        String aux1 = model.getValueAt(i, 0).toString();
+        name = model.getValueAt(i, 0).toString();
         if (i >= 0) {
-            // remove a row from jtable
+            // remove a row from jtables
+            selectMembership();
 
 
-            jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json", parser);
-            JSONArray auxJSON = new JSONArray();
-            JSONObject auxObj = new JSONObject();
-            JSONObject obj;
-            System.out.println(this.gymUser.getUsername());
-            Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
-                obj = it.next();
-                if (obj.get("username").toString().equals(this.gymUser.getUsername())) {
-
-                    auxObj.put("username", obj.get("username"));
-                    auxObj.put("password", obj.get("password"));
-                    auxObj.put("exercises", obj.get("exercises"));
-                    auxObj.put("role", "gymUser");
-                    auxObj.put("membershipType", aux1);
-
-                    auxJSON.add(auxObj);
-                } else {
-                    auxJSON.add(obj);
-                }
-
-
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxJSON.toJSONString());
-                    file.flush();
-
-
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
-            }
             //model.removeRow(i);
 
        /* try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
@@ -189,43 +175,81 @@ public class ManageMembership extends JFrame implements ActionListener {
 
     public void deleteMembership() {
         //int i = table.getSelectedRow();
-       // String aux1 = model.getValueAt(i, 0).toString();
+        // String aux1 = model.getValueAt(i, 0).toString();
         //if (i >= 0) {
-            // remove a row from jtable
+        // remove a row from jtable
 
 
-            jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json", parser);
-            JSONArray auxJSON = new JSONArray();
-            JSONObject auxObj = new JSONObject();
-            JSONObject obj;
-            System.out.println(this.gymUser.getUsername());
-            Iterator<JSONObject> it = jsonArray.iterator();
-            while (it.hasNext()) {
-                obj = it.next();
-                if (obj.get("username").toString().equals(this.gymUser.getUsername())) {
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json", parser);
+        JSONArray auxJSON = new JSONArray();
+        JSONObject auxObj = new JSONObject();
+        JSONObject obj;
+        System.out.println(this.gymUser.getUsername());
+        Iterator<JSONObject> it = jsonArray.iterator();
+        while (it.hasNext()) {
+            obj = it.next();
+            if (obj.get("username").toString().equals(this.gymUser.getUsername())) {
 
-                    auxObj.put("username", obj.get("username"));
-                    auxObj.put("password", obj.get("password"));
-                    auxObj.put("exercises", obj.get("exercises"));
-                    auxObj.put("role", "gymUser");
-                    auxObj.put("membershipType", "unassigned");
+                auxObj.put("username", obj.get("username"));
+                auxObj.put("password", obj.get("password"));
+                auxObj.put("exercises", obj.get("exercises"));
+                auxObj.put("role", "gymUser");
+                auxObj.put("membershipType", "unassigned");
 
-                    auxJSON.add(auxObj);
-                } else {
-                    auxJSON.add(obj);
-                }
+                auxJSON.add(auxObj);
+                message = "deleted";
 
-
-                try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
-                    file.write(auxJSON.toJSONString());
-                    file.flush();
+            } else {
+                auxJSON.add(obj);
+            }
 
 
-                } catch (IOException h) {
-                    h.printStackTrace();
-                }
+            try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                file.write(auxJSON.toJSONString());
+                file.flush();
+
+
+
+            } catch (IOException h) {
+                h.printStackTrace();
             }
         }
-
     }
+    public void selectMembership()
+    {
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json", parser);
+        JSONArray auxJSON = new JSONArray();
+        JSONObject auxObj = new JSONObject();
+        JSONObject obj;
+        System.out.println(this.gymUser.getUsername());
+        Iterator<JSONObject> it = jsonArray.iterator();
+        while (it.hasNext()) {
+            obj = it.next();
+            if (obj.get("username").toString().equals(this.gymUser.getUsername())) {
+
+                auxObj.put("username", obj.get("username"));
+                auxObj.put("password", obj.get("password"));
+                auxObj.put("exercises", obj.get("exercises"));
+                auxObj.put("role", "gymUser");
+                auxObj.put("membershipType", name);
+
+                auxJSON.add(auxObj);
+                message = "selected";
+            } else {
+                auxJSON.add(obj);
+            }
+
+
+            try (FileWriter file = new FileWriter("src/main/java/Resources/users.json")) {
+                file.write(auxJSON.toJSONString());
+                file.flush();
+
+
+            } catch (IOException h) {
+                h.printStackTrace();
+            }
+        }
+    }
+
+}
 
