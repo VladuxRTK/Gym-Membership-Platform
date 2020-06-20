@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.Iterator;
 
@@ -33,6 +34,7 @@ public class Login extends JFrame implements ActionListener{
     private JRadioButton radioButton2;
     private JRadioButton radioButton3;
     private JLabel backgroundLabel;
+    private String getMessage;
   
     
     public Login()
@@ -141,18 +143,44 @@ public class Login extends JFrame implements ActionListener{
     	
     }
 
+    public void setPasswordText(String passwordText)
+	{
+		this.password.setText(passwordText);
+	}
+	public void setUsernameText(String passwordText)
+	{
+		this.username.setText(passwordText);
+	}
+
+	public void setRadioButton1()
+	{
+		radioButton1.setSelected(true);
+	}
+	public void setRadioButton2()
+	{
+		radioButton2.setSelected(true);
+	}
+	public void setRadioButton3()
+	{
+		radioButton3.setSelected(true);
+	}
+	public String getMessageString()
+	{
+		return this.getMessage;
+	}
+
+
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
 		JButton clicked = (JButton)e.getSource();
-		try{
-			login(e);
-
-		} catch (InformationNotCorrect informationNotCorrect) {
-			informationNotCorrect.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Account not found! Verify the information or create a new account!", "alert", JOptionPane.ERROR_MESSAGE);
+		if(clicked == loginButton)
+		{
+			handleLogin();
 		}
+
 		if(clicked == createAccountButton)
 		{
 			new RegisterPage();
@@ -182,13 +210,25 @@ public class Login extends JFrame implements ActionListener{
 		
 		
 	}
+	public void handleLogin()
+	{
+		try{
 
-	public void login(ActionEvent e) throws InformationNotCorrect
+			login();
+			getMessage = "Logged in!";
+		} catch (InformationNotCorrect informationNotCorrect) {
+			informationNotCorrect.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Account not found! Verify the information or create a new account!", "alert", JOptionPane.ERROR_MESSAGE);
+			getMessage="Account not found! Verify the information or create a new account!";
+		}
+	}
+
+	public void login() throws InformationNotCorrect
 	{
 		String passwordField = password.getText();
 		String usernameField = username.getText();
 		//JButton clicked = (JButton)e.getSource();
-		JButton clicked = (JButton)e.getSource();
+		//JButton clicked = (JButton)e.getSource();
 		String password;
 		String userName;
 		String role;
@@ -256,7 +296,7 @@ public class Login extends JFrame implements ActionListener{
 		} catch (ParseException h) {
 			h.printStackTrace();
 		}
-		if(isLogged==false && clicked != createAccountButton)
+		if(isLogged==false)
 		{
 			throw new InformationNotCorrect();
 		}
