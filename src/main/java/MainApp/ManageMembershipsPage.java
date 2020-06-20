@@ -20,6 +20,13 @@ public class ManageMembershipsPage extends JFrame{
 	
 	private JSONParser parser;
 	private JSONArray jsonArray;
+	private DefaultTableModel model;
+	private JTable table;
+	private Object[] row;
+	private JTextField textType;
+	private JTextField textPrice;
+	private String message;
+	private String aux1;
 	public ManageMembershipsPage(String name)
 	{
 	    super(name);
@@ -40,11 +47,11 @@ public class ManageMembershipsPage extends JFrame{
 		
 		   // create JFrame and JTable
         JFrame frame = new JFrame();
-        JTable table = new JTable(); 
+		table = new JTable();
         
         // create a table model and set a Column Identifiers to this model 
         Object[] columns = {"Type","Price"};
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         model.setColumnIdentifiers(columns);
         
         // set the model to the table
@@ -58,8 +65,8 @@ public class ManageMembershipsPage extends JFrame{
         table.setRowHeight(30);
         
         // create JTextFields
-        JTextField textType = new JTextField();
-        JTextField textPrice = new JTextField();
+      textType = new JTextField();
+      textPrice = new JTextField();
        
         
         // create JButtons
@@ -93,7 +100,7 @@ public class ManageMembershipsPage extends JFrame{
         this.add(btnUpdate);
         
         // create an array of objects to set the row data
-        Object[] row = new Object[2];
+         row = new Object[2];
         
         Iterator<JSONObject> it = jsonArray.iterator();
 		while (it.hasNext()) {
@@ -108,25 +115,11 @@ public class ManageMembershipsPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                row[0] = textType.getText();
-                row[1] = textPrice.getText();
-
-                // add row to the model
-                model.addRow(row);
-                JSONObject obj = new JSONObject();
-    	    	obj.put("name", row[0]);
-    	    	obj.put("price", row[1]);
-
-    	        jsonArray.add(obj);
-
-    	    try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
-    	    file.write(jsonArray.toJSONString());
-    	    file.flush();
-            }catch (IOException h) {
-        	    h.printStackTrace();
-    	    }
+                addMembership();
             }
+
         });
+
         
         // button remove row
         btnDelete.addActionListener(new ActionListener(){
@@ -135,37 +128,9 @@ public class ManageMembershipsPage extends JFrame{
             public void actionPerformed(ActionEvent e) {
             
                 // i = the index of the selected row
-                int i = table.getSelectedRow();
-                if(i >= 0){
-                    // remove a row from jtable
+                deleteMembership();
 
-                    String aux1 = model.getValueAt(i,0).toString();
-                    JSONArray auxJSON = new JSONArray();
-                    Iterator<JSONObject> it = jsonArray.iterator();
-                    while (it.hasNext()) {
-                        JSONObject obj = it.next();
-                        if(!obj.get("name").toString().equals(aux1)) {
-                            auxJSON.add(obj);
-                        }
-
-
-
-                        try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
-                            file.write(auxJSON.toJSONString());
-                            file.flush();
-
-
-                        } catch (IOException h) {
-                            h.printStackTrace();
-                        }
-                    }
-                    model.removeRow(i);
-                }
-                else{
-                    System.out.println("Delete Error");
-                }
-            }
-        });
+        }});
         
         // get selected row data From table to textfields 
         table.addMouseListener(new MouseAdapter(){
@@ -190,10 +155,10 @@ public class ManageMembershipsPage extends JFrame{
              
                 // i = the index of the selected row
                 int i = table.getSelectedRow();
-                
-                if(i >= 0) 
+
+                if(i >= 0)
                 {
-                   String aux1 = model.getValueAt(i,0).toString();
+                   aux1 = model.getValueAt(i,0).toString();
                    JSONArray auxJSON = new JSONArray();
                    model.setValueAt(textType.getText(), i, 0);
                    model.setValueAt(textPrice.getText(), i, 1);
@@ -208,17 +173,17 @@ public class ManageMembershipsPage extends JFrame{
         				auxJSON.add(auxObj);
         			}
                		else {auxJSON.add(obj);}
-               	   
+
             	    try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
             	    file.write(auxJSON.toJSONString());
             	    file.flush();
-            	    
-            	    
+
+
             	    } catch (IOException h) {
             	    h.printStackTrace();
             	    }
                    }
-                   
+
                 }
                 else{
                     System.out.println("Update Error");
@@ -228,7 +193,91 @@ public class ManageMembershipsPage extends JFrame{
         getContentPane().setBackground(new Color(65, 105, 225));
         
 	}
-	
-	
+	public void setTextType(String text)
+    {
+        this.textType.setText(text);
+        message = "type";
+    }
+    public void setTextPrice(String text)
+    {
+        this.textPrice.setText(text);
+        message="price";
+    }
 
+    public String getTextType()
+    {
+        message = "type";
+        return textType.getText();
+
+    }
+    public String getTextPrice()
+    {
+        message = "price";
+        return textPrice.getText();
+    }
+    public String getMessage()
+    {
+        return message;
+    }
+	
+	public void addMembership()
+    {
+
+        row[0] = textType.getText();
+        row[1] = textPrice.getText();
+
+        // add row to the model
+        model.addRow(row);
+        JSONObject obj = new JSONObject();
+        obj.put("name", row[0]);
+        obj.put("price", row[1]);
+
+        jsonArray.add(obj);
+
+        try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
+            file.write(jsonArray.toJSONString());
+            file.flush();
+            message = "Added";
+        }catch (IOException h) {
+            h.printStackTrace();
+        }
+
+    }
+    public void deleteMembership() {
+        int i = table.getSelectedRow();
+        if (i >= 0) {
+            // remove a row from jtable
+
+            aux1 = model.getValueAt(i, 0).toString();
+
+            JSONArray auxJSON = new JSONArray();
+            Iterator<JSONObject> it = jsonArray.iterator();
+            while (it.hasNext()) {
+                JSONObject obj = it.next();
+                if (!obj.get("name").toString().equals(aux1)) {
+                    auxJSON.add(obj);
+                }
+
+
+                try (FileWriter file = new FileWriter("src/main/java/Resources/memberships.json")) {
+                    file.write(auxJSON.toJSONString());
+                    file.flush();
+
+
+                } catch (IOException h) {
+                    h.printStackTrace();
+                }
+            }
+            model.removeRow(i);
+            message="Deleted";
+        }
+
+                else{
+        System.out.println("Delete Error");
+    }
 }
+        }
+
+
+
+

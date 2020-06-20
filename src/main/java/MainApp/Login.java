@@ -35,6 +35,7 @@ public class Login extends JFrame implements ActionListener{
     private JRadioButton radioButton3;
     private JLabel backgroundLabel;
     private String getMessage;
+    private boolean isTrue;
   
     
     public Login()
@@ -146,27 +147,38 @@ public class Login extends JFrame implements ActionListener{
     public void setPasswordText(String passwordText)
 	{
 		this.password.setText(passwordText);
+		getMessage = passwordText;
 	}
 	public void setUsernameText(String passwordText)
 	{
 		this.username.setText(passwordText);
+		getMessage = passwordText;
 	}
 
 	public void setRadioButton1()
 	{
 		radioButton1.setSelected(true);
+		isTrue = true;
+
 	}
 	public void setRadioButton2()
 	{
 		radioButton2.setSelected(true);
+		isTrue=true;
 	}
 	public void setRadioButton3()
 	{
 		radioButton3.setSelected(true);
+		isTrue = true;
 	}
 	public String getMessageString()
 	{
 		return this.getMessage;
+	}
+
+	public boolean state()
+	{
+	  return isTrue;
 	}
 
 

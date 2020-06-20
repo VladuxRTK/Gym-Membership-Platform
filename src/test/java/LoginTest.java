@@ -9,9 +9,44 @@ public class LoginTest {
     private static final String username = "test";
     private static final String password = "test";
 
-    @Before
-    public void setUp()
+    @Test
+    public void testSetPassword()
     {
+        login = new Login();
+
+        login.setPasswordText("abc");
+        assertEquals("abc",login.getMessageString());
+    }
+    @Test
+    public void testSetUsername()
+    {
+        login = new Login();
+        login.setUsernameText("abc");
+        assertEquals("abc",login.getMessageString());
+    }
+
+    @Test
+    public void testSetSelected1()
+    {
+        login = new Login();
+        login.setRadioButton1();
+        assertEquals(true,login.state());
+
+    }
+    @Test
+    public void testSetSelected2()
+    {
+        login = new Login();
+        login.setRadioButton2();
+        assertEquals(true,login.state());
+
+    }
+    @Test
+    public void testSetSelected3()
+    {
+        login = new Login();
+        login.setRadioButton3();
+        assertEquals(true,login.state());
 
     }
 
@@ -26,6 +61,7 @@ public class LoginTest {
         assertEquals("Logged in!",login.getMessageString());
     }
 
+    @Test
     public void handleLoginBadTestInfo1()
     {
         login = new Login();
@@ -36,6 +72,7 @@ public class LoginTest {
         assertEquals("Account not found! Verify the information or create a new account!",login.getMessageString());
 
     }
+    @Test
     public void handleLoginBadTestInfo2()
     {
         login = new Login();
@@ -46,7 +83,8 @@ public class LoginTest {
         assertEquals("Account not found! Verify the information or create a new account!",login.getMessageString());
 
     }
-    public void handleLoginBadTestInfo1()
+    @Test
+    public void handleLoginBadTestInfo3()
     {
         login = new Login();
         login.setPasswordText("v");
@@ -56,16 +94,18 @@ public class LoginTest {
         assertEquals("Account not found! Verify the information or create a new account!",login.getMessageString());
 
     }
+    @Test
     public void handleLoginTest2()
     {
         login = new Login();
-        login.setPasswordText("admin");
-        login.setUsernameText("1234");
+        login.setPasswordText("1234");
+        login.setUsernameText("admin");
         login.setRadioButton1();
         login.handleLogin();
         assertEquals("Logged in!",login.getMessageString());
 
     }
+    @Test
     public void handleLoginTest3()
     {
         login = new Login();
@@ -75,6 +115,8 @@ public class LoginTest {
         login.handleLogin();
         assertEquals("Logged in!",login.getMessageString());
     }
+
+
 
 
 }
