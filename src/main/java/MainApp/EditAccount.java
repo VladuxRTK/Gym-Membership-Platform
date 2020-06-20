@@ -72,7 +72,7 @@ public class EditAccount extends JFrame implements ActionListener {
     }
     public String getRepeatPassword()
     {
-        message="username";
+        message="repeat";
         return repeatPassword.getText();
     }
 
@@ -160,7 +160,7 @@ public class EditAccount extends JFrame implements ActionListener {
             } catch (IOException | ParseException h) {
                 h.printStackTrace();
             }*/
-            jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
+
             changeAccountDetails();
             JOptionPane.showMessageDialog(this,"Account details changed!");
             changeDetails.dispose();
@@ -171,7 +171,8 @@ public class EditAccount extends JFrame implements ActionListener {
         }
     }
 
-    private void changeAccountDetails() {
+    public void changeAccountDetails() {
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
         System.out.println("Here");
         System.out.print(jsonArray);
         String usernameField;
@@ -196,9 +197,11 @@ public class EditAccount extends JFrame implements ActionListener {
                 auxObj.put("username", usernameField);
                 auxObj.put("password", passwordField);
                 auxObj.put("role", "gymUser");
-                auxObj.put("membershipType", null);
-                auxObj.put("group", "aba");
+                auxObj.put("membershipType", obj.get("membershipType"));
+                auxObj.put("group", obj.get("group"));
+                auxObj.put("exercises",obj.get("exercises"));
                 auxJSON.add(auxObj);
+                message = "changed";
             } else {
                 auxJSON.add(obj);
             }

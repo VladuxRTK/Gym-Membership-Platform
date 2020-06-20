@@ -109,8 +109,8 @@ public class LoginTest {
     public void handleLoginTest3()
     {
         login = new Login();
-        login.setPasswordText("g");
-        login.setUsernameText("g");
+        login.setPasswordText("zer");
+        login.setUsernameText("zer");
         login.setRadioButton3();
         login.handleLogin();
         assertEquals("Logged in!",login.getMessageString());

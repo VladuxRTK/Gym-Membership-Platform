@@ -1,5 +1,8 @@
 import AbstractTypes.Trainer;
+import AuxiliaryStuff.JSONReader;
 import MainApp.RegisterPage;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +34,9 @@ public class RegisterTest {
     @Test
     public void testHandleRegistration()
     {
+        JSONArray jsonArray;
+        JSONParser parser = new JSONParser();
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
         register = new RegisterPage();
         register.setRadioButton1();
         register.setPasswordText("1234");
@@ -38,11 +44,15 @@ public class RegisterTest {
         register.setUsernameText("1234");
         register.handleRegister();
         assertEquals("Account created successfully!",register.getMessageString());
+        JSONReader.writeJSON("src/main/java/Resources/users.json",jsonArray);
     }
 
     @Test
     public void testAddTheSameUser()
     {
+        JSONArray jsonArray;
+        JSONParser parser = new JSONParser();
+        jsonArray = JSONReader.readJSON("src/main/java/Resources/users.json",parser);
         register = new RegisterPage();
         register.setRadioButton1();
         register.setPasswordText("h");
@@ -52,6 +62,7 @@ public class RegisterTest {
         register.handleRegister();
 
         assertEquals("Username already taken!",register.getMessageString());
+        JSONReader.writeJSON("src/main/java/Resources/users.json",jsonArray);
     }
 
     public void testPasswordMatch()

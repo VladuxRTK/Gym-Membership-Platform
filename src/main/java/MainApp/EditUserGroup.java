@@ -297,7 +297,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
 
     }
 
-    public void listUsers() {
+    /*public void listUsers() {
 
         parser = new JSONParser();
         ArrayList<String> arrayJSon = new ArrayList<String>();
@@ -327,7 +327,7 @@ public class EditUserGroup extends  JFrame implements ActionListener {
             h.printStackTrace();
         }
 
-    }
+    }*/
 
     @Override
     public void actionPerformed(ActionEvent e) {
