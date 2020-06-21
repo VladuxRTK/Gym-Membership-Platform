@@ -148,6 +148,7 @@ public class GymUserPage extends JFrame implements ActionListener {
 		if(clicked == send)
 		{
 			sendSuggestion();
+			sendTrainerSuggestionFrame.dispose();
 
 		}
 
