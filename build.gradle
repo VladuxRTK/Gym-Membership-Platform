@@ -16,7 +16,7 @@ plugins {
 }
 
 apply plugin: 'application'
-mainClassName = 'main.java.MainApp.Main'
+mainClassName = 'MainApp.Main'
 
 
 repositories {
