@@ -11,7 +11,7 @@ public class GymUser extends User{
     {
         this.group = group;
     }
-    public String getGroup(String group)
+    public String getGroup()
     {
         return this.group;
     }

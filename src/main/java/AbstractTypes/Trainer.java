@@ -19,10 +19,12 @@ public class Trainer extends User {
 
 		return group;
 	}
+	public void setGroup(String group)
 
-
-	public void groupPrint(){
-
-
+	{
+		this.group = group;
 	}
+
+
+
 }
